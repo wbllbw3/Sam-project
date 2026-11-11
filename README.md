@@ -11,7 +11,7 @@
 | ----- | ----------- | ------ | ------ |
 | 1 | _pending_ | — | [`class-01/`](class-01/) |
 | 2 | _pending_ | — | [`class-02/`](class-02/) |
-| 3 | _pending_ | — | [`class-03/`](class-03/) |
+| 3 | Week 3 progress check-in | in progress | [`class-03/`](class-03/) |
 | 4 | _pending_ | — | [`class-04/`](class-04/) |
 | 5 | _pending_ | — | [`class-05/`](class-05/) |
 | 6 | _pending_ | — | [`class-06/`](class-06/) |
