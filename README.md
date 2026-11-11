@@ -9,8 +9,8 @@
 
 | Class | Deliverable | Status | Folder |
 | ----- | ----------- | ------ | ------ |
-| 1 | _pending_ | — | [`class-01/`](class-01/) |
-| 2 | _pending_ | — | [`class-02/`](class-02/) |
+| 1 | _not submitted_ | — | — |
+| 2 | _not submitted_ | — | — |
 | 3 | Week 3 progress check-in | in progress | [`class-03/`](class-03/) |
 | 4 | _pending_ | — | [`class-04/`](class-04/) |
 | 5 | _pending_ | — | [`class-05/`](class-05/) |
