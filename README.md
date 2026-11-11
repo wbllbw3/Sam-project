@@ -1,6 +1,6 @@
-﻿# Sam's Project
+# Sam's Project
 
-> Senior Capstone Project 鈥?a small playground for web tech 鈥?HTML, JS, TypeScript, Python and a bit of Java,
+> Senior Capstone Project — a small playground for web tech — HTML, JS, TypeScript, Python and a bit of Java,
 > all stitched together with Markdown and Mermaid diagrams.
 
 ---
@@ -12,18 +12,18 @@ reaching for when I start something new on the web: a static HTML page, a bit of
 vanilla JS, a TypeScript module, a small Python script and a thin web server that
 serves the whole thing locally.
 
-Nothing here is meant to be production-ready 鈥?the goal is to keep the feedback loop
+Nothing here is meant to be production-ready — the goal is to keep the feedback loop
 short: edit, refresh, see the result.
 
 ## Maybe using HTML, or JS, web
 
 The current shortlist of things this project touches:
 
-- JS 鈥?DOM wiring, fetch, small utilities
-- Python 鈥?scripting, data cleanup, quick prototypes
-- TypeScript 鈥?typed modules that the browser can consume
-- Java 鈥?the "what does this look like in a typed, compiled language?" reference
-- Web Server 鈥?a local static server for development
+- JS — DOM wiring, fetch, small utilities
+- Python — scripting, data cleanup, quick prototypes
+- TypeScript — typed modules that the browser can consume
+- Java — the "what does this look like in a typed, compiled language?" reference
+- Web Server — a local static server for development
 
 ## Tech Stack
 
@@ -110,9 +110,9 @@ Then open <http://localhost:8000> in a browser.
 
 ### Recommended VS Code extensions
 
-- **Markdown Preview Mermaid Support** 鈥?renders the diagrams in the preview
-- **Prettier** 鈥?consistent formatting on save
-- **ESLint** 鈥?catches JS/TS mistakes early
+- **Markdown Preview Mermaid Support** — renders the diagrams in the preview
+- **Prettier** — consistent formatting on save
+- **ESLint** — catches JS/TS mistakes early
 
 These are already suggested in [`.vscode/extensions.json`](.vscode/extensions.json),
 so VS Code will offer to install them when the folder is opened.
@@ -166,18 +166,18 @@ public class Main {
 
 ```text
 Sam-project/
-鈹溾攢鈹€ .vscode/
-鈹?  鈹斺攢鈹€ extensions.json    # recommended extensions
-鈹溾攢鈹€ assets/
-鈹?  鈹溾攢鈹€ style.css
-鈹?  鈹斺攢鈹€ logo.svg
-鈹溾攢鈹€ src/
-鈹?  鈹溾攢鈹€ main.js            # entry point
-鈹?  鈹溾攢鈹€ utils.ts           # typed helpers
-鈹?  鈹斺攢鈹€ api.py             # small data endpoint
-鈹溾攢鈹€ index.html
-鈹溾攢鈹€ README.md
-鈹斺攢鈹€ package.json
+├── .vscode/
+│   └── extensions.json    # recommended extensions
+├── assets/
+│   ├── style.css
+│   └── logo.svg
+├── src/
+│   ├── main.js            # entry point
+│   ├── utils.ts           # typed helpers
+│   └── api.py             # small data endpoint
+├── index.html
+├── README.md
+└── package.json
 ```
 
 ## Roadmap
@@ -197,7 +197,7 @@ Sam-project/
 
 ## License
 
-MIT 鈥?see [`LICENSE`](LICENSE) for details.
+MIT — see [`LICENSE`](LICENSE) for details.
 
 ---
 
