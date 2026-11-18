@@ -12,7 +12,7 @@
 | 1 | _not submitted_ | — | — |
 | 2 | _not submitted_ | — | — |
 | 3 | Week 3 progress check-in | in progress | [`class-03/`](class-03/) |
-| 4 | _pending_ | — | [`class-04/`](class-04/) |
+| 4 | Python basics practice | done | [`class-04/`](class-04/) |
 | 5 | _pending_ | — | [`class-05/`](class-05/) |
 | 6 | _pending_ | — | [`class-06/`](class-06/) |
 | 7 | _pending_ | — | [`class-07/`](class-07/) |
