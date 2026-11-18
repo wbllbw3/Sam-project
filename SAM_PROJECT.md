@@ -29,10 +29,21 @@ Status values: `done` / `in progress` / `—` (not started).
 3. Commit with a message that names the class: `class-03: add landing page`.
 4. Keep the table above in sync — it is the first thing a reviewer opens.
 
+**File naming:** deliverable documents use the `SAM_` prefix in capitals, e.g.
+`SAM_PROJECT.md`, `SAM_CLASS_04_REPORT.md`. Each class folder keeps a plain `README.md`
+so GitHub renders it in the folder view.
+
 ## Project documentation
 
 - [Project overview](docs/project-overview.md) — stack, architecture diagrams, local setup
 - [`.vscode/extensions.json`](.vscode/extensions.json) — recommended editor extensions
+
+## AI usage
+
+**I use AI_deepseek** (DeepSeek) as a coding and writing assistant on this project —
+drafting documentation, diagrams and code scaffolding. Everything it produces is read,
+edited and verified before it is committed, and the design decisions and the final
+submission are mine.
 
 ## License
 
