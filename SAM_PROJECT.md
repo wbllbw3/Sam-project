@@ -13,7 +13,7 @@
 | 2 | _not submitted_ | — | — |
 | 3 | Week 3 progress check-in | in progress | [`class-03/`](class-03/) |
 | 4 | Python basics practice | done | [`class-04/`](class-04/) |
-| 5 | _pending_ | — | [`class-05/`](class-05/) |
+| 5 | Gacha simulator (single-file web app) | done | [`class-05/`](class-05/) |
 | 6 | _pending_ | — | [`class-06/`](class-06/) |
 | 7 | _pending_ | — | [`class-07/`](class-07/) |
 | 8 | _pending_ | — | [`class-08/`](class-08/) |

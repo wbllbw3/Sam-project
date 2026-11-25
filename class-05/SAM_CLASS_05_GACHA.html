@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gacha Simulator — Sam's Project</title>
+<style>
+  :root {
+    --bg: #0f1218;
+    --panel: #171c25;
+    --panel-2: #1e2531;
+    --line: #2a3442;
+    --text: #e8edf5;
+    --muted: #93a0b4;
+    --r: #9aa4b2;
+    --sr: #4da3ff;
+    --ssr: #ffce4a;
+    --danger: #ff6b6b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(1200px 600px at 50% -10%, #1b2433 0%, var(--bg) 55%) no-repeat, var(--bg);
+    color: var(--text);
+    font: 15px/1.55 "Segoe UI", system-ui, -apple-system, "Microsoft YaHei", sans-serif;
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+
+  header.top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px; margin-bottom: 20px;
+  }
+  h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: .2px; }
+  .sub { margin: 0; color: var(--muted); font-size: 13px; }
+  .lang-switch { display: flex; gap: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
+  .lang-switch button {
+    border: 0; background: transparent; color: var(--muted); padding: 6px 12px;
+    border-radius: 7px; cursor: pointer; font-size: 13px;
+  }
+  .lang-switch button[aria-pressed="true"] { background: var(--panel-2); color: var(--text); }
+
+  .panel {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px 18px; margin-bottom: 14px;
+  }
+  .panel h2 { font-size: 15px; margin: 0 0 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .6px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .stat { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat .k { font-size: 12px; color: var(--muted); }
+  .stat .v { font-size: 20px; font-weight: 600; margin-top: 2px; }
+  .stat .v small { font-size: 12px; color: var(--muted); font-weight: 400; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  button.btn {
+    border: 1px solid #3a4a5f; background: linear-gradient(180deg, #24303f, #1c2634);
+    color: var(--text); padding: 11px 18px; border-radius: 10px; cursor: pointer;
+    font-size: 14px; font-weight: 600; transition: transform .08s ease, border-color .15s;
+  }
+  button.btn:hover:not(:disabled) { border-color: #5b708c; }
+  button.btn:active:not(:disabled) { transform: translateY(1px); }
+  button.btn:disabled { opacity: .45; cursor: not-allowed; }
+  button.btn.primary { background: linear-gradient(180deg, #3d6fd6, #2b55aa); border-color: #4a7fe8; }
+  button.btn.ghost { background: transparent; }
+  button.btn.danger { border-color: #5a3030; color: var(--danger); background: transparent; }
+
+  .hint { margin: 12px 0 0; color: var(--muted); font-size: 13px; min-height: 20px; }
+  .hint.warn { color: var(--danger); }
+
+  table.rates { width: 100%; border-collapse: collapse; font-size: 14px; }
+  table.rates th, table.rates td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  table.rates th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  table.rates tr:last-child td { border-bottom: 0; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .pill.R { color: #cfd6e2; background: #2b3341; }
+  .pill.SR { color: #bcd9ff; background: #1d3557; }
+  .pill.SSR { color: #3a2c00; background: var(--ssr); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .card {
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px; text-align: center; position: relative;
+    animation: pop .32s ease both;
+  }
+  .card.R { border-color: #333d4d; }
+  .card.SR { border-color: #2f5e9e; box-shadow: 0 0 0 1px #2f5e9e inset, 0 6px 18px -12px #4da3ff; }
+  .card.SSR { border-color: #806a20; box-shadow: 0 0 0 1px #806a20 inset, 0 8px 24px -12px #ffce4a; }
+  .card svg { width: 100%; height: 76px; display: block; }
+  .card .name { font-size: 12px; margin-top: 4px; color: var(--text); }
+  .card .rar { position: absolute; top: 6px; right: 6px; }
+
+  @keyframes pop { from { opacity: 0; transform: translateY(6px) scale(.96); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+
+  .hist { max-height: 320px; overflow: auto; font-variant-numeric: tabular-nums; }
+  .hist-row { display: flex; gap: 10px; align-items: center; padding: 6px 8px; border-bottom: 1px solid #212a37; font-size: 13px; }
+  .hist-row:last-child { border-bottom: 0; }
+  .hist-row .idx { color: var(--muted); width: 58px; flex: none; }
+  .hist-row .nm { flex: 1; }
+  .hist-row .tm { color: var(--muted); font-size: 12px; }
+  .empty { color: var(--muted); font-size: 13px; padding: 8px 0; }
+
+  details.help summary { cursor: pointer; color: var(--text); font-weight: 600; }
+  details.help .body { color: #c3cddb; font-size: 14px; padding-top: 10px; }
+  details.help ol, details.help ul { margin: 8px 0; padding-left: 22px; }
+  details.help li { margin: 4px 0; }
+  code { background: #10151d; border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; font-size: 12.5px; }
+  footer { color: #66748a; font-size: 12px; text-align: center; margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1 id="appTitle">Gacha Simulator</h1>
+      <p class="sub" id="appSub"></p>
+    </div>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button id="langEn" type="button">EN</button>
+      <button id="langZh" type="button">中文</button>
+    </div>
+  </header>
+
+  <section class="panel">
+    <div class="stats" id="stats"></div>
+    <div class="actions">
+      <button class="btn primary" id="pull1" type="button"></button>
+      <button class="btn primary" id="pull10" type="button"></button>
+      <button class="btn ghost" id="sim" type="button"></button>
+      <button class="btn danger" id="reset" type="button"></button>
+    </div>
+    <p class="hint" id="hint"></p>
+  </section>
+
+  <section class="panel">
+    <h2 id="ratesTitle"></h2>
+    <table class="rates">
+      <thead><tr id="ratesHead"></tr></thead>
+      <tbody id="ratesBody"></tbody>
+    </table>
+    <p class="hint" id="ratesNote"></p>
+  </section>
+
+  <section class="panel">
+    <h2 id="resultTitle"></h2>
+    <div class="grid" id="results" aria-live="polite"></div>
+    <p class="empty" id="resultsEmpty"></p>
+  </section>
+
+  <section class="panel">
+    <h2 id="historyTitle"></h2>
+    <div class="hist" id="history"></div>
+  </section>
+
+  <section class="panel">
+    <details class="help" id="help">
+      <summary id="helpSummary"></summary>
+      <div class="body" id="helpBody"></div>
+    </details>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------------------- data */
+
+  var STORAGE_KEY = "sam_gacha_v1";
+  var START_PULLS = 1000;
+  var HISTORY_MAX = 200;
+  var AND_RATE = 0.18;      // SR share of the non-SSR mass is 18 : 80
+  var BASE_SSR = 0.02;      // 2%
+  var PITY_START = 40;      // first 40 pulls keep the base rate
+  var PITY_STEP = 0.04;     // +4 percentage points per pull after that
+  var HARD_PITY = 65;       // 2% + 4% * 25 = 102% -> guaranteed
+
+  var CARDS = [
+    { id: "dot-circle",   rarity: "R", shape: "dot",   variant: "circle" },
+    { id: "dot-square",   rarity: "R", shape: "dot",   variant: "square" },
+    { id: "dot-triangle", rarity: "R", shape: "dot",   variant: "triangle" },
+    { id: "dot-diamond",  rarity: "R", shape: "dot",   variant: "diamond" },
+    { id: "dot-cross",    rarity: "R", shape: "dot",   variant: "cross" },
+    { id: "dot-star",     rarity: "R", shape: "dot",   variant: "star" },
+    { id: "flat-triangle",rarity: "SR", shape: "flat", variant: "triangle" },
+    { id: "flat-square",  rarity: "SR", shape: "flat", variant: "square" },
+    { id: "flat-circle",  rarity: "SR", shape: "flat", variant: "circle" },
+    { id: "flat-pentagon",rarity: "SR", shape: "flat", variant: "pentagon" },
+    { id: "flat-hexagon", rarity: "SR", shape: "flat", variant: "hexagon" },
+    { id: "flat-star",    rarity: "SR", shape: "flat", variant: "star" },
+    { id: "solid-cube",   rarity: "SSR", shape: "solid", variant: "cube" },
+    { id: "solid-sphere", rarity: "SSR", shape: "solid", variant: "sphere" },
+    { id: "solid-pyramid",rarity: "SSR", shape: "solid", variant: "pyramid" },
+    { id: "solid-cylinder",rarity: "SSR", shape: "solid", variant: "cylinder" }
+  ];
+
+  var NAME = {
+    en: {
+      "dot-circle": "Circle Dot", "dot-square": "Square Dot", "dot-triangle": "Triangle Dot",
+      "dot-diamond": "Diamond Dot", "dot-cross": "Cross Dot", "dot-star": "Star Dot",
+      "flat-triangle": "Triangle", "flat-square": "Square", "flat-circle": "Circle",
+      "flat-pentagon": "Pentagon", "flat-hexagon": "Hexagon", "flat-star": "Star",
+      "solid-cube": "Cube", "solid-sphere": "Sphere",
+      "solid-pyramid": "Triangular Pyramid", "solid-cylinder": "Cylinder"
+    },
+    zh: {
+      "dot-circle": "圆点", "dot-square": "方点", "dot-triangle": "三角点",
+      "dot-diamond": "菱形点", "dot-cross": "十字点", "dot-star": "星点",
+      "flat-triangle": "三角形", "flat-square": "正方形", "flat-circle": "圆形",
+      "flat-pentagon": "五边形", "flat-hexagon": "六边形", "flat-star": "星形",
+      "solid-cube": "正方体", "solid-sphere": "球体",
+      "solid-pyramid": "三棱锥", "solid-cylinder": "圆柱"
+    }
+  };
+
+  var I18N = {
+    en: {
+      title: "Gacha Simulator",
+      sub: "Pull point, 2D and 3D shapes. Rates and pity are shown openly.",
+      pullsLeft: "Pulls left", ssrRate: "Current SSR rate", pity: "Pulls since last SSR",
+      total: "Total pulls", ssrCount: "SSR pulled",
+      pull1: "Pull ×1", pull10: "Pull ×10", sim: "Simulate 10,000", reset: "Reset all",
+      ratesTitle: "Drop rates",
+      thRarity: "Rarity", thShape: "Shapes", thBase: "Card share", thGroup: "Group rate",
+      ratesNote: "Group rates are what the draw uses; a card's share is its rarity rate divided by the number of cards in that rarity. During pity the SSR rate replaces the base 2% and the remaining mass is split 18 : 80 between SR and R.",
+      resultsTitle: "Latest result",
+      historyTitle: "History (last 200)",
+      emptyResults: "Nothing pulled yet.",
+      emptyHistory: "No pulls recorded yet.",
+      hintReady: "1000 pulls to start. Single pull costs 1, ten-pull costs 10.",
+      hintNoPulls: "Not enough pulls left — reset to start over.",
+      hintPity: "Pity: after 40 pulls without an SSR, every further pull adds 4 percentage points; 65 is guaranteed.",
+      hintSim: "Simulation: {n} pulls → R {r}%, SR {sr}%, SSR {ssr}% (avg 1 SSR per {avg} pulls). Does not change your balance.",
+      confirmReset: "Reset everything? Pulls, history and pity counter will be cleared.",
+      helpSummary: "How to use",
+      help: [
+        "<p>A browser mini-game: you spend pulls to draw cards, each card being a point, a flat shape or a solid. Higher rarity means fewer cards and a rarer draw.</p>",
+        "<ol>",
+        "<li><strong>Pull ×1</strong> spends 1 pull and draws one card.</li>",
+        "<li><strong>Pull ×10</strong> spends 10 pulls and guarantees at least one SR or SSR in the batch.</li>",
+        "<li><strong>Simulate 10,000</strong> runs a statistical check without touching your balance.</li>",
+        "<li><strong>Reset all</strong> clears pulls, history and the pity counter.</li>",
+        "</ol>",
+        "<p>Progress is stored in your browser (localStorage), so refreshing the page keeps your pulls and history. It is per browser and per machine — nothing is sent anywhere.</p>",
+        "<p>Pity rule: the first 40 pulls stay at 2% SSR; from the 41st pull on, every pull adds 4 percentage points, so the 65th is guaranteed. The current SSR rate is always shown above.</p>"
+      ],
+      footer: "Class 05 · Gacha simulator · single-file, no network, no dependencies."
+    },
+    zh: {
+      title: "抽卡模拟器",
+      sub: "抽点、二维图形和三维图形。概率与保底规则全部公开。",
+      pullsLeft: "剩余抽数", ssrRate: "当前 SSR 概率", pity: "距上次 SSR",
+      total: "累计抽数", ssrCount: "SSR 数量",
+      pull1: "单抽 ×1", pull10: "十连 ×10", sim: "模拟 10000 次", reset: "重置全部",
+      ratesTitle: "概率表",
+      thRarity: "稀有度", thShape: "包含图形", thBase: "单卡占比", thGroup: "类别概率",
+      ratesNote: "抽卡按类别概率执行；单卡占比 = 类别概率 ÷ 该类别卡片数。保底生效时，SSR 用当前概率替代基础 2%，剩余概率按 18 : 80 分给 SR 和 R。",
+      resultsTitle: "最近一次结果",
+      historyTitle: "历史记录（最近 200 条）",
+      emptyResults: "还没有抽过卡。",
+      emptyHistory: "暂无抽卡记录。",
+      hintReady: "初始 1000 抽。单抽消耗 1，十连消耗 10。",
+      hintNoPulls: "抽数不够了，点“重置全部”可以重新开始。",
+      hintPity: "保底：连续 40 抽没有 SSR 后，每抽额外 +4 个百分点，第 65 抽必出。",
+      hintSim: "模拟结果：{n} 抽 → R {r}%，SR {sr}%，SSR {ssr}%（平均 {avg} 抽一个 SSR）。不影响你的抽数。",
+      confirmReset: "确定重置？抽数、历史记录和保底计数都会清空。",
+      helpSummary: "使用说明",
+      help: [
+        "<p>这是一个浏览器小游戏：消耗抽数抽卡，每张卡是一个点、一个平面图形或一个立体图形。稀有度越高，卡池里越少、越难抽到。</p>",
+        "<ol>",
+        "<li><strong>单抽 ×1</strong>：消耗 1 抽，抽一张。</li>",
+        "<li><strong>十连 ×10</strong>：消耗 10 抽，必出一个 SR 或 SSR。</li>",
+        "<li><strong>模拟 10000 次</strong>：做概率统计，不消耗抽数。</li>",
+        "<li><strong>重置全部</strong>：清空抽数、历史记录和保底计数。</li>",
+        "</ol>",
+        "<p>进度保存在浏览器本地（localStorage），刷新页面后抽数和历史都还在。数据只存在这台机器的这个浏览器里，不会上传。</p>",
+        "<p>保底规则：前 40 抽 SSR 概率固定 2%；从第 41 抽起每抽 +4 个百分点，第 65 抽必定出 SSR。当前概率实时显示在上方。</p>"
+      ],
+      footer: "第 05 次课 · 抽卡模拟器 · 单文件、无网络依赖。"
+    }
+  };
+
+  /* --------------------------------------------------------------- state */
+
+  var state = null;
+
+  function defaultState() {
+    return {
+      v: 1,
+      left: START_PULLS,
+      used: 0,
+      counter: 0,
+      stats: { R: 0, SR: 0, SSR: 0 },
+      history: [],
+      lang: "en"
+    };
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      var s = JSON.parse(raw);
+      var d = defaultState();
+      if (typeof s.left !== "number") s.left = d.left;
+      if (typeof s.used !== "number") s.used = d.used;
+      if (typeof s.counter !== "number") s.counter = d.counter;
+      if (!s.stats) s.stats = d.stats;
+      if (!Array.isArray(s.history)) s.history = [];
+      if (s.lang !== "zh" && s.lang !== "en") s.lang = "en";
+      return s;
+    } catch (e) {
+      return defaultState();
+    }
+  }
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* private mode */ }
+  }
+
+  /* ------------------------------------------------------------ gacha math */
+
+  // Probability of SSR on the next pull, given how many pulls have gone by
+  // since the last SSR (state.counter).
+  function ssrRate(counter) {
+    var n = counter + 1;                     // this pull is the n-th since the last SSR
+    if (n <= PITY_START) return BASE_SSR;    // first 40 pulls: flat 2%
+    return Math.min(1, BASE_SSR + PITY_STEP * (n - PITY_START));
+  }
+
+  function roll(rng, counter) {
+    var pSsr = ssrRate(counter);
+    if (rng() < pSsr) return { rarity: "SSR", counter: 0 };
+    var rest = 1 - pSsr;
+    var pSr = rest * (AND_RATE / (1 - BASE_SSR));   // 18 : 80 split of the remainder
+    if (rng() < pSr) return { rarity: "SR", counter: counter + 1 };
+    return { rarity: "R", counter: counter + 1 };
+  }
+
+  function pool(rarity) {
+    var out = [];
+    for (var i = 0; i < CARDS.length; i++) if (CARDS[i].rarity === rarity) out.push(CARDS[i]);
+    return out;
+  }
+
+  function pickCard(rarity, rng) {
+    var p = pool(rarity);
+    return p[Math.floor(rng() * p.length) % p.length];
+  }
+
+  function rngDefault() { return Math.random(); }
+
+  /* ------------------------------------------------------------- drawing */
+
+  function doPull(rng) {
+    var res = roll(rng, state.counter);
+    state.counter = res.counter;
+    return pickCard(res.rarity, rng);
+  }
+
+  function doPullTen(rng) {
+    var out = [];
+    var gotHigh = false;
+    for (var i = 0; i < 9; i++) {
+      var c = doPull(rng);
+      if (c.rarity !== "R") gotHigh = true;
+      out.push(c);
+    }
+    if (gotHigh) {
+      out.push(doPull(rng));
+    } else {
+      // Guaranteed slot: SSR at the current pity rate, otherwise SR.
+      var pSsr = ssrRate(state.counter);
+      if (rng() < pSsr) {
+        state.counter = 0;
+        out.push(pickCard("SSR", rng));
+      } else {
+        state.counter = state.counter + 1;
+        out.push(pickCard("SR", rng));
+      }
+    }
+    return out;
+  }
+
+  function commit(cards) {
+    for (var i = 0; i < cards.length; i++) {
+      var c = cards[i];
+      state.stats[c.rarity] = (state.stats[c.rarity] || 0) + 1;
+      state.used += 1;
+      state.history.unshift({ id: c.id, rarity: c.rarity, n: state.used, t: Date.now() });
+    }
+    if (state.history.length > HISTORY_MAX) state.history.length = HISTORY_MAX;
+    save();
+  }
+
+  /* ------------------------------------------------------------- svg art */
+
+  var COLORS = {
+    R: { line: "#9aa4b2", fill: "#3a4453", hi: "#59657a" },
+    SR: { line: "#4da3ff", fill: "#1d3557", hi: "#5fb0ff" },
+    SSR: { line: "#ffce4a", fill: "#4a3a10", hi: "#ffe38a" }
+  };
+
+  function svgWrap(inner) {
+    return '<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' + inner + "</svg>";
+  }
+
+  function dotShape(v, c) {
+    switch (v) {
+      case "square": return '<rect x="20" y="20" width="24" height="24" rx="4" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5"/>';
+      case "triangle": return '<path d="M32 16 L48 46 L16 46 Z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>';
+      case "diamond": return '<path d="M32 14 L48 32 L32 50 L16 32 Z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>';
+      case "cross": return '<path d="M27 14 h10 v13 h13 v10 h-13 v13 h-10 v-13 h-13 v-10 h13 z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>';
+      case "star": return starPath(32, 32, 18, 8, c);
+      default: return '<circle cx="32" cy="32" r="13" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5"/>';
+    }
+  }
+
+  function starPath(cx, cy, outer, inner, c) {
+    var pts = [];
+    for (var i = 0; i < 10; i++) {
+      var r = i % 2 ? inner : outer;
+      var a = -Math.PI / 2 + i * Math.PI / 5;
+      pts.push((cx + r * Math.cos(a)).toFixed(1) + "," + (cy + r * Math.sin(a)).toFixed(1));
+    }
+    return '<polygon points="' + pts.join(" ") + '" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>';
+  }
+
+  function flatShape(v, c) {
+    switch (v) {
+      case "triangle": return '<path d="M32 12 L53 50 L11 50 Z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="3" stroke-linejoin="round"/>';
+      case "square": return '<rect x="14" y="14" width="36" height="36" rx="3" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="3"/>';
+      case "circle": return '<circle cx="32" cy="32" r="19" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="3"/>';
+      case "pentagon": return polygon(32, 33, 21, 5, -90, c);
+      case "hexagon": return polygon(32, 32, 21, 6, 0, c);
+      case "star": return starPath(32, 33, 22, 9, c);
+      default: return '<circle cx="32" cy="32" r="18" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="3"/>';
+    }
+  }
+
+  function polygon(cx, cy, r, sides, startDeg, c) {
+    var pts = [];
+    for (var i = 0; i < sides; i++) {
+      var a = (startDeg + i * 360 / sides) * Math.PI / 180;
+      pts.push((cx + r * Math.cos(a)).toFixed(1) + "," + (cy + r * Math.sin(a)).toFixed(1));
+    }
+    return '<polygon points="' + pts.join(" ") + '" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="3" stroke-linejoin="round"/>';
+  }
+
+  function solidShape(v, c) {
+    switch (v) {
+      case "sphere":
+        return '<circle cx="32" cy="33" r="19" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5"/>' +
+               '<ellipse cx="25" cy="26" rx="7" ry="5" fill="' + c.hi + '" opacity=".45" transform="rotate(-25 25 26)"/>' +
+               '<path d="M14 33 a18 7 0 0 0 36 0" fill="none" stroke="' + c.line + '" stroke-width="1.5" opacity=".55"/>';
+      case "cylinder":
+        return '<path d="M16 18 h32 v26 a16 6 0 0 1 -32 0 z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+               '<ellipse cx="32" cy="18" rx="16" ry="6" fill="' + c.hi + '" opacity=".55" stroke="' + c.line + '" stroke-width="2.5"/>' +
+               '<path d="M16 18 v26" stroke="' + c.line + '" stroke-width="2.5"/>' +
+               '<path d="M48 18 v26" stroke="' + c.line + '" stroke-width="2.5"/>';
+      case "pyramid":
+        return '<path d="M32 12 L18 42 L32 48 Z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+               '<path d="M32 12 L46 42 L32 48 Z" fill="' + c.hi + '" opacity=".45" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+               '<path d="M18 42 L46 42 L32 48 Z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>';
+      default: // cube
+        return '<path d="M32 10 L50 20 L32 30 L14 20 Z" fill="' + c.hi + '" opacity=".55" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+               '<path d="M14 20 L32 30 L32 52 L14 42 Z" fill="' + c.fill + '" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>' +
+               '<path d="M32 30 L50 20 L50 42 L32 52 Z" fill="' + c.fill + '" opacity=".78" stroke="' + c.line + '" stroke-width="2.5" stroke-linejoin="round"/>';
+    }
+  }
+
+  function cardSVG(card) {
+    var c = COLORS[card.rarity];
+    var inner = card.shape === "dot" ? dotShape(card.variant, c)
+              : card.shape === "flat" ? flatShape(card.variant, c)
+              : solidShape(card.variant, c);
+    return svgWrap(inner);
+  }
+
+  /* ------------------------------------------------------------- render */
+
+  function t(key) { return I18N[state.lang][key]; }
+  function cardName(card) { return NAME[state.lang][card.id]; }
+
+  function fmtTime(ts) {
+    var d = new Date(ts);
+    function p(n) { return n < 10 ? "0" + n : "" + n; }
+    return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+  }
+
+  function fmtPct(x) {
+    var v = Math.round(x * 1000) / 10;          // percent, one decimal at most
+    return (v % 1 === 0 ? v.toFixed(0) : v.toFixed(1)) + "%";
+  }
+
+  function renderStats() {
+    var box = document.getElementById("stats");
+    var rate = ssrRate(state.counter);
+    var rows = [
+      [t("pullsLeft"), state.left],
+      [t("ssrRate"), fmtPct(rate)],
+      [t("pity"), state.counter + " / " + HARD_PITY],
+      [t("total"), state.used],
+      [t("ssrCount"), state.stats.SSR]
+    ];
+    box.innerHTML = rows.map(function (r) {
+      return '<div class="stat"><div class="k">' + r[0] + '</div><div class="v">' + r[1] + "</div></div>";
+    }).join("");
+  }
+
+  function renderRates() {
+    var groups = ["R", "SR", "SSR"];
+    document.getElementById("ratesTitle").textContent = t("ratesTitle");
+    document.getElementById("ratesHead").innerHTML =
+      "<th>" + t("thRarity") + "</th><th>" + t("thShape") + "</th><th>" + t("thBase") + "</th><th>" + t("thGroup") + "</th>";
+    var body = document.getElementById("ratesBody");
+    body.innerHTML = groups.map(function (g) {
+      var p = pool(g);
+      var names = p.map(cardName).join(state.lang === "zh" ? "、" : ", ");
+      var group = g === "R" ? "80%" : g === "SR" ? "18%" : "2%";
+      var each = g === "R" ? "13.3%" : g === "SR" ? "3.0%" : "0.5%";
+      return "<tr><td><span class=\"pill " + g + "\">" + g + "</span></td><td>" + names +
+             "</td><td>" + each + "</td><td>" + group + "</td></tr>";
+    }).join("");
+    document.getElementById("ratesNote").textContent = t("ratesNote");
+  }
+
+  function renderResults(cards) {
+    var box = document.getElementById("results");
+    var empty = document.getElementById("resultsEmpty");
+    document.getElementById("resultTitle").textContent = t("resultsTitle");
+    if (!cards || !cards.length) {
+      box.innerHTML = "";
+      empty.textContent = t("emptyResults");
+      empty.style.display = "";
+      return;
+    }
+    empty.style.display = "none";
+    box.innerHTML = cards.map(function (c, i) {
+      return '<div class="card ' + c.rarity + '" style="animation-delay:' + (i * 40) + 'ms">' +
+             '<span class="rar pill ' + c.rarity + '">' + c.rarity + "</span>" +
+             cardSVG(c) +
+             '<div class="name">' + cardName(c) + "</div></div>";
+    }).join("");
+  }
+
+  function renderHistory() {
+    var box = document.getElementById("history");
+    document.getElementById("historyTitle").textContent = t("historyTitle");
+    if (!state.history.length) {
+      box.innerHTML = '<p class="empty">' + t("emptyHistory") + "</p>";
+      return;
+    }
+    box.innerHTML = state.history.map(function (h) {
+      var card = null;
+      for (var i = 0; i < CARDS.length; i++) if (CARDS[i].id === h.id) card = CARDS[i];
+      var nm = card ? cardName(card) : h.id;
+      return '<div class="hist-row"><span class="idx">#' + h.n + "</span>" +
+             '<span class="pill ' + h.rarity + '">' + h.rarity + "</span>" +
+             '<span class="nm">' + nm + '</span><span class="tm">' + fmtTime(h.t) + "</span></div>";
+    }).join("");
+  }
+
+  function renderButtons() {
+    document.getElementById("pull1").textContent = t("pull1");
+    document.getElementById("pull10").textContent = t("pull10");
+    document.getElementById("sim").textContent = t("sim");
+    document.getElementById("reset").textContent = t("reset");
+    document.getElementById("pull1").disabled = state.left < 1;
+    document.getElementById("pull10").disabled = state.left < 10;
+  }
+
+  function setHint(text, warn) {
+    var h = document.getElementById("hint");
+    h.textContent = text;
+    h.className = warn ? "hint warn" : "hint";
+  }
+
+  function renderStatic() {
+    document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+    document.getElementById("appTitle").textContent = t("title");
+    document.getElementById("appSub").textContent = t("sub");
+    document.getElementById("helpSummary").textContent = t("helpSummary");
+    document.getElementById("helpBody").innerHTML = t("help").join("");
+    document.getElementById("footer").textContent = t("footer");
+    document.getElementById("langEn").setAttribute("aria-pressed", String(state.lang === "en"));
+    document.getElementById("langZh").setAttribute("aria-pressed", String(state.lang === "zh"));
+  }
+
+  function renderAll() {
+    renderStatic();
+    renderStats();
+    renderRates();
+    renderButtons();
+    renderHistory();
+  }
+
+  /* ------------------------------------------------------------- actions */
+
+  function pull(n) {
+    if (state.left < n) { setHint(t("hintNoPulls"), true); return; }
+    state.left -= n;
+    var cards = n === 10 ? doPullTen(rngDefault) : [doPull(rngDefault)];
+    commit(cards);
+    renderStats();
+    renderRates();
+    renderButtons();
+    renderHistory();
+    renderResults(cards);
+    setHint(t("hintPity"), false);
+    if (state.left === 0) setHint(t("hintNoPulls"), true);
+  }
+
+  function simulate(n) {
+    var counter = 0, r = 0, sr = 0, ssr = 0, ssrPulls = 0, run = 0;
+    for (var i = 0; i < n; i++) {
+      var res = roll(Math.random, counter);
+      counter = res.counter;
+      if (res.rarity === "SSR") { ssr++; ssrPulls += run + 1; run = 0; }
+      else { run++; if (res.rarity === "SR") sr++; else r++; }
+    }
+    var avg = ssr ? (ssrPulls / ssr).toFixed(1) : "—";
+    var msg = t("hintSim")
+      .replace("{n}", String(n))
+      .replace("{r}", (r / n * 100).toFixed(1))
+      .replace("{sr}", (sr / n * 100).toFixed(1))
+      .replace("{ssr}", (ssr / n * 100).toFixed(2))
+      .replace("{avg}", avg);
+    setHint(msg, false);
+  }
+
+  function resetAll() {
+    if (!window.confirm(t("confirmReset"))) return;
+    var lang = state.lang;
+    state = defaultState();
+    state.lang = lang;
+    save();
+    renderAll();
+    renderResults([]);
+    setHint(t("hintReady"), false);
+  }
+
+  function setLang(lang) {
+    state.lang = lang;
+    save();
+    renderStatic();
+    renderStats();
+    renderRates();
+    renderButtons();
+    renderHistory();
+  }
+
+  /* --------------------------------------------------------------- boot */
+
+  function boot() {
+    state = load();
+    renderAll();
+    renderResults([]);
+    renderButtons();
+    setHint(t("hintReady"), false);
+
+    document.getElementById("pull1").addEventListener("click", function () { pull(1); });
+    document.getElementById("pull10").addEventListener("click", function () { pull(10); });
+    document.getElementById("sim").addEventListener("click", function () { simulate(10000); });
+    document.getElementById("reset").addEventListener("click", resetAll);
+    document.getElementById("langEn").addEventListener("click", function () { setLang("en"); });
+    document.getElementById("langZh").addEventListener("click", function () { setLang("zh"); });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>
