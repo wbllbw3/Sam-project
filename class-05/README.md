@@ -4,12 +4,15 @@ A small browser game: pull cards, each card a point, a flat shape or a solid.
 Built as one self-contained HTML file with plain JavaScript — no framework, no
 build step, no network calls.
 
+![The gacha page](screenshot.png)
+
 ## Files
 
 | File | What it is |
 | --- | --- |
 | [`SAM_CLASS_05_GACHA.html`](SAM_CLASS_05_GACHA.html) | The whole app: markup, CSS, JavaScript and SVG card art inlined. Double-click to play. |
 | [`SAM_CLASS_05_USAGE.md`](SAM_CLASS_05_USAGE.md) | English user guide: controls, rates, pity formula, saving, troubleshooting. |
+| [`screenshot.png`](screenshot.png) | What the page looks like after three ten-pulls. |
 
 ## Quick start
 
@@ -42,6 +45,10 @@ Driving the real drawing code from a harness:
 
 ## Notes
 
+- Layout: controls on the left, card stage on the right; below ~620px the panel
+  stacks on top and the card grid drops to two columns.
+- Cards carry their rarity in the frame, not only in a label: plain for R, a blue
+  glow for SR, an animated gold shimmer for SSR.
 - Single file on purpose: the requirement was "double-click and it runs", and that
   also means it works offline and can be handed in as one artifact.
 - Card art is SVG (isometric for the solids) so the file stays small and needs no

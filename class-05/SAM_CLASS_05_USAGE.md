@@ -5,6 +5,8 @@ dot (R), a flat shape (SR) or a solid (SSR). No install, no server, no network.
 
 **File:** `SAM_CLASS_05_GACHA.html`
 
+![The gacha page: controls on the left, pulled cards on the right](screenshot.png)
+
 ---
 
 ## 1. How to open it
@@ -30,14 +32,22 @@ Both ways give identical behaviour. There is no build step and no dependency.
 
 ## 2. What you see
 
+The page is split in two: a control panel on the left, the card stage on the right.
+On a narrow window (a phone, or a half-screen browser) the panel stacks on top.
+
 | Area | What it shows |
 | --- | --- |
-| Top row of tiles | pulls left, current SSR rate, pulls since last SSR, total pulls, SSR count |
+| Pulls left (top left) | the remaining balance as a big number, with a bar showing it against the 1000 start |
+| Since last SSR | the pity counter, the live SSR chance, and a bar filling towards the 65-pull ceiling |
 | Buttons | single pull, ten-pull, simulate 10,000 draws, reset everything |
-| Drop rates | every card in the pool with its group rate and per-card share |
-| Latest result | the cards from your most recent pull |
-| History | your last 200 pulls, newest first, with a timestamp |
+| Total pulls / SSR pulled | running totals, saved with your progress |
+| Latest pull | the cards from your most recent draw — R cards are plain, SR cards get a blue frame, SSR cards get a gold frame with a moving shimmer |
+| Drop rates | one bar per rarity, with the group rate, the per-card share and the card names |
+| History | your last 200 pulls, newest first, colour-coded per rarity with a timestamp |
 | How to use | a collapsible copy of the short instructions |
+
+Before the first pull, the stage shows a row of empty card backs instead of a blank
+box, so the page never looks broken or unfinished.
 
 ---
 
@@ -48,7 +58,7 @@ Both ways give identical behaviour. There is no build step and no dependency.
 | **Pull ×1** | 1 pull | Draws one card. |
 | **Pull ×10** | 10 pulls | Draws ten cards; the batch is guaranteed to contain at least one SR or SSR. |
 | **Simulate 10,000** | free | Runs 10,000 draws in memory and reports the measured distribution. Your balance, history and pity counter are untouched. |
-| **Reset all** | — | Asks for confirmation, then clears pulls, history and the pity counter, and restores the 1000-pull balance. |
+| **Reset** | — | Asks for confirmation, then clears pulls, history and the pity counter, and restores the 1000-pull balance. |
 
 Buttons disable themselves when the balance is too low (fewer than 1 or 10 pulls).
 
@@ -125,7 +135,7 @@ Progress lives in the browser's `localStorage` under the key `sam_gacha_v1`:
 
 Refreshing or closing the tab keeps everything. The data is per browser and per
 machine: another browser, another computer, or a private window starts fresh, and
-nothing is uploaded anywhere. **Reset all** clears all four items.
+nothing is uploaded anywhere. **Reset** clears all four items.
 
 ---
 
@@ -165,6 +175,6 @@ Use **Simulate 10,000** to reproduce a distribution check yourself.
 | Symptom | Cause / fix |
 | --- | --- |
 | Pulls reset to 1000 after reopening | The browser blocks `localStorage` for `file://` (some hardened settings) or you are in a private window. Serve over `http://localhost` instead. |
-| Buttons greyed out | Balance is under 1 or 10 pulls. Click **Reset all** to start over. |
+| Buttons greyed out | Balance is under 1 or 10 pulls. Click **Reset** to start over. |
 | Nothing happens on double-click | The file association is missing; right-click → **Open with** → your browser. |
 | Page renders without styling | The file was opened as plain text (e.g. in an editor). Open it with a browser, not a text editor. |
