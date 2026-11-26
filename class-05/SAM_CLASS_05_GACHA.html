@@ -18,6 +18,7 @@
     --gold: #f3c969;
     --danger: #ff6b6b;
     --radius: 16px;
+    --nav: 74px;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -30,38 +31,90 @@
       var(--bg);
     background-attachment: fixed;
     min-height: 100vh;
-    padding: 22px 20px 40px;
     -webkit-font-smoothing: antialiased;
   }
-  .page { max-width: 1180px; margin: 0 auto; }
+  [hidden] { display: none !important; }
+  .page { max-width: 1180px; margin: 0 auto; padding: 22px 20px 40px; }
 
-  /* ---------------------------------------------------------------- header */
-  header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .logo {
-    width: 38px; height: 38px; flex: none; border-radius: 11px;
-    background: linear-gradient(145deg, #2a3a52, #17202c);
-    border: 1px solid #35465c; display: grid; place-items: center;
-    box-shadow: 0 6px 18px -10px #000;
+  /* ------------------------------------------------------------- start screen */
+  .start {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 40px 20px 56px;
   }
-  h1 { font-size: 20px; margin: 0; letter-spacing: -.2px; }
-  .sub { margin: 2px 0 0; color: var(--muted); font-size: 12.5px; }
+  .start-inner { max-width: 960px; margin: 0 auto; width: 100%; }
+  .start-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 26px; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 7px; font-size: 11.5px; letter-spacing: 1.6px;
+    text-transform: uppercase; color: #93a3ba; margin-bottom: 10px;
+  }
+  .kicker::before { content: ""; width: 22px; height: 1px; background: #4a5f7a; }
+  .start h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.1; margin: 0 0 10px; letter-spacing: -1.2px; }
+  .start .lede { margin: 0; color: #a6b4c8; font-size: 15px; max-width: 540px; }
+
+  .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 12px; margin: 26px 0 24px; }
+  .rule {
+    position: relative; padding: 16px 16px 15px; border-radius: 14px;
+    background: linear-gradient(180deg, #151d28, #111823);
+    border: 1px solid var(--line); overflow: hidden;
+  }
+  .rule::after {
+    content: attr(data-n); position: absolute; right: 12px; top: 8px;
+    font-size: 26px; font-weight: 800; color: #1e2a3a; letter-spacing: -1px;
+  }
+  .rule h3 { margin: 0 0 6px; font-size: 14px; letter-spacing: .1px; }
+  .rule p { margin: 0; font-size: 12.8px; color: #93a3ba; line-height: 1.55; }
+  .rule b { color: var(--gold); font-weight: 600; }
+
+  .start-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  button.start-btn {
+    border: 1px solid #ffe3a3; border-radius: 14px; cursor: pointer; font-family: inherit;
+    background: linear-gradient(135deg, #f8d98c, #d9a53f 55%, #c08f2c);
+    color: #2a1f04; font-size: 15.5px; font-weight: 750; letter-spacing: .3px;
+    padding: 15px 34px; box-shadow: 0 16px 34px -20px #f3c969;
+    transition: transform .1s ease, box-shadow .18s;
+  }
+  button.start-btn:hover { box-shadow: 0 20px 40px -18px #f3c969; }
+  button.start-btn:active { transform: translateY(1px); }
+  .start-note { font-size: 12px; color: #6f7e94; margin: 0; }
   .lang-switch { display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 4px; flex: none; }
   .lang-switch button {
     border: 0; background: transparent; color: var(--muted); padding: 6px 13px; white-space: nowrap;
-    border-radius: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600;
+    border-radius: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600; font-family: inherit;
   }
   .lang-switch button[aria-pressed="true"] { background: var(--panel-2); color: var(--text); box-shadow: 0 1px 0 #2e3d52 inset; }
 
-  /* ---------------------------------------------------------------- layout */
+  /* ------------------------------------------------------------- game shell */
+  .game { padding-bottom: calc(var(--nav) + 26px); }
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .logo {
+    width: 34px; height: 34px; flex: none; border-radius: 10px;
+    background: linear-gradient(145deg, #2a3a52, #17202c);
+    border: 1px solid #35465c; display: grid; place-items: center;
+  }
+  h1.title { font-size: 17px; margin: 0; letter-spacing: -.2px; white-space: nowrap; }
+  .tagline { margin: 1px 0 0; color: var(--muted); font-size: 12px; }
+  .head-right { display: flex; align-items: center; gap: 8px; flex: none; }
+  button.icon-btn {
+    width: 34px; height: 34px; border-radius: 10px; cursor: pointer; font-family: inherit;
+    border: 1px solid var(--line); background: var(--panel); color: #a9b7ca;
+    display: grid; place-items: center; font-size: 14px; font-weight: 700;
+  }
+  button.icon-btn:hover { border-color: #3d5570; color: var(--text); }
+
   .layout { display: grid; grid-template-columns: 336px minmax(0, 1fr); gap: 14px; align-items: start; }
   @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } .side { position: static; } }
   @media (max-width: 620px) {
-    body { padding: 14px 12px 32px; }
+    .page { padding: 14px 12px 0; }
     header.top { flex-wrap: wrap; row-gap: 10px; }
-    h1 { font-size: 18px; }
+    h1.title { font-size: 16px; }
     .bank .big span.num { font-size: 36px; }
     .grid { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 9px; }
+    .rules { grid-template-columns: 1fr 1fr; gap: 9px; }
+    .rule { padding: 12px; }
+    .rule h3 { font-size: 13px; }
+    .rule p { font-size: 11.8px; }
+    .rule::after { font-size: 20px; }
   }
   .side { display: grid; gap: 14px; position: sticky; top: 16px; }
   .main { display: grid; gap: 14px; min-width: 0; }
@@ -79,12 +132,8 @@
   .k { font-size: 12px; color: var(--muted); letter-spacing: .3px; }
   .fine { margin: 10px 0 0; font-size: 12px; color: #74839a; line-height: 1.5; }
 
-  /* ------------------------------------------------------------- bank/pity */
   .bank .big { display: flex; align-items: baseline; gap: 7px; margin-top: 2px; }
-  .bank .big span.num {
-    font-size: 42px; font-weight: 700; letter-spacing: -1.6px; line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-  }
+  .bank .big span.num { font-size: 42px; font-weight: 700; letter-spacing: -1.6px; line-height: 1.1; font-variant-numeric: tabular-nums; }
   .bank .big span.unit { font-size: 13px; color: var(--muted); }
   .meter { height: 6px; border-radius: 99px; background: #0c1118; overflow: hidden; margin-top: 10px; border: 1px solid #1c2532; }
   .meter i { display: block; height: 100%; border-radius: 99px; transition: width .35s ease; }
@@ -98,14 +147,12 @@
   .rate-now .v { font-size: 20px; font-weight: 700; color: var(--gold); font-variant-numeric: tabular-nums; }
   .rate-now .k { font-size: 11px; }
 
-  /* ---------------------------------------------------------------- buttons */
   .actions { display: grid; gap: 10px; }
   button.btn {
     border: 1px solid #33455c; color: var(--text); border-radius: 12px;
-    padding: 0 16px; cursor: pointer; font-size: 14px; font-weight: 650;
+    padding: 0 16px; cursor: pointer; font-size: 14px; font-weight: 650; font-family: inherit;
     background: linear-gradient(180deg, #22303f, #1a2430);
     transition: transform .09s ease, border-color .16s, box-shadow .16s, filter .16s;
-    font-family: inherit;
   }
   button.btn:hover:not(:disabled) { border-color: #4d6a8a; }
   button.btn:active:not(:disabled) { transform: translateY(1px); }
@@ -130,7 +177,6 @@
   .totals { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .totals .v { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 1px; }
 
-  /* ----------------------------------------------------------------- stage */
   .stage { min-height: 292px; display: flex; flex-direction: column; }
   .stage-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
   .stage-head h2 { margin: 0; }
@@ -140,7 +186,9 @@
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 12px; }
   .grid.single { grid-template-columns: minmax(0, 168px); }
   .stage.compact { min-height: 0; }
-  .card { position: relative; border-radius: 13px; padding: 1px; }
+  @media (max-width: 620px) { .grid.single { grid-template-columns: minmax(0, 140px); } }
+
+  .card { position: relative; border-radius: 13px; padding: 1px; animation: pop .34s cubic-bezier(.2,.9,.3,1) both; }
   .card .inner {
     position: relative; overflow: hidden; border-radius: 12px;
     background: linear-gradient(175deg, #1a2331, #141b26);
@@ -153,8 +201,7 @@
   .card .name { font-size: 12px; margin-top: 6px; color: #cfdaea; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .card .rar {
     position: absolute; top: 7px; left: 7px; z-index: 2;
-    font-size: 9.5px; font-weight: 800; letter-spacing: .8px;
-    padding: 2px 6px; border-radius: 5px;
+    font-size: 9.5px; font-weight: 800; letter-spacing: .8px; padding: 2px 6px; border-radius: 5px;
   }
   .card.R .inner { border-color: #2f3b4c; }
   .card.R .rar { background: #2b3543; color: #b7c3d4; }
@@ -171,11 +218,8 @@
   .card.SSR .art, .card.SSR .name { position: relative; z-index: 1; }
   .card.SSR:hover .inner { box-shadow: 0 12px 34px -16px #f3c969; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .card { animation: pop .34s cubic-bezier(.2, .9, .3, 1) both; }
   @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.94); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) {
-    .card, .card.SSR .inner::after { animation: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .card, .card.SSR .inner::after { animation: none; } }
 
   .stage-empty { flex: 1; display: grid; place-items: center; gap: 14px; padding: 26px 0 10px; }
   .ghost-row { display: flex; gap: 10px; }
@@ -187,7 +231,6 @@
   .ghost-card span { width: 14px; height: 14px; border: 1px solid #33475e; transform: rotate(45deg); border-radius: 2px; }
   .empty { color: var(--muted); font-size: 13px; margin: 0; }
 
-  /* ----------------------------------------------------------------- rates */
   .rate-list { display: grid; gap: 14px; }
   .rate-item .top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
   .rate-item .top .pct { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -198,14 +241,11 @@
   .bar i.SR { background: linear-gradient(90deg, #2b6bb5, #5aa9ff); }
   .bar i.SSR { background: linear-gradient(90deg, #a97f22, #f3c969); min-width: 7px; }
   .rate-names { font-size: 11.5px; color: #74839a; margin-top: 6px; line-height: 1.45; }
-  .chip {
-    font-size: 10px; font-weight: 800; letter-spacing: .7px; padding: 2px 7px; border-radius: 5px;
-  }
+  .chip { font-size: 10px; font-weight: 800; letter-spacing: .7px; padding: 2px 7px; border-radius: 5px; }
   .chip.R { background: #2b3543; color: #b7c3d4; }
   .chip.SR { background: #1d3a5e; color: #a9d2ff; }
   .chip.SSR { background: var(--gold); color: #2a1f04; }
 
-  /* --------------------------------------------------------------- history */
   .hist { max-height: 300px; overflow: auto; border-radius: 10px; }
   .hist::-webkit-scrollbar { width: 8px; }
   .hist::-webkit-scrollbar-thumb { background: #24303f; border-radius: 99px; }
@@ -221,7 +261,6 @@
   .hist-row .nm { flex: 1; color: #c8d4e4; }
   .hist-row .tm { color: #5d6b80; font-size: 11.5px; }
 
-  /* ------------------------------------------------------------------ help */
   .help-wrap { padding: 0; }
   details.help summary {
     cursor: pointer; padding: 14px 18px; font-weight: 650; font-size: 13.5px; list-style: none;
@@ -235,97 +274,238 @@
   details.help li { margin: 5px 0; }
   details.help strong { color: var(--text); }
 
-  footer { color: #55637a; font-size: 11.5px; text-align: center; margin-top: 20px; }
+  /* --------------------------------------------------------------- collection */
+  .coll-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .coll-progress { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 220px; }
+  .coll-progress .meter { flex: 1; margin: 0; }
+  .coll-progress .num { font-size: 13px; color: #c3cddb; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .coll-progress .num b { color: var(--gold); }
+  .coll-count { font-size: 12px; color: var(--muted); }
+
+  .card.locked .inner { border-color: #232e3c; background: linear-gradient(175deg, #141b25, #101720); box-shadow: none; }
+  .card.locked .inner::after { display: none; }
+  .card.locked:hover .inner { transform: none; box-shadow: none; }
+  .card.locked .art { filter: grayscale(1) brightness(.55); opacity: .35; }
+  .card.locked .name { color: #4e5b6d; }
+  .card.locked .rar { background: #202a37; color: #4e5b6d; }
+  .card .owned-count {
+    position: absolute; top: 7px; right: 7px; z-index: 2;
+    font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 99px;
+    background: #0e1620cc; border: 1px solid #2b3a4d; color: #c3cddb;
+  }
+  .card.locked .owned-count { display: none; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: #74839a; margin-top: 14px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.R { background: #6f7f94; }
+  .dot.SR { background: var(--blue); }
+  .dot.SSR { background: var(--gold); }
+
+  /* ------------------------------------------------------------------- history */
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .summary .cell { background: #101720; border: 1px solid var(--line-soft); border-radius: 11px; padding: 11px 13px; }
+  .summary .cell .k { font-size: 11.5px; }
+  .summary .cell .v { font-size: 21px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 1px; }
+  .summary .cell .v.gold { color: var(--gold); }
+  .summary .cell .v.blue { color: var(--blue); }
+  .hist-full { max-height: none; }
+
+  /* ---------------------------------------------------------------- tab bar */
+  .tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; height: var(--nav);
+    display: flex; justify-content: center; gap: 4px;
+    background: #0b1017f2; border-top: 1px solid #1d2836;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    padding: 0 12px env(safe-area-inset-bottom);
+  }
+  .tabbar .tabs { display: flex; width: 100%; max-width: 520px; }
+  .tabbar button {
+    flex: 1; border: 0; background: transparent; cursor: pointer; font-family: inherit;
+    color: #64748b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    font-size: 11.5px; font-weight: 600; padding: 8px 4px; position: relative; transition: color .15s;
+  }
+  .tabbar button svg { width: 22px; height: 22px; }
+  .tabbar button[aria-selected="true"] { color: var(--gold); }
+  .tabbar button[aria-selected="true"]::before {
+    content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 34px; height: 2px; border-radius: 0 0 3px 3px; background: var(--gold);
+  }
+  .tabbar button:not([aria-selected="true"]):hover { color: #9fb0c5; }
+  .tabbar .badge {
+    position: absolute; top: 6px; right: 50%; transform: translateX(22px);
+    min-width: 15px; height: 15px; padding: 0 4px; border-radius: 99px;
+    background: var(--gold); color: #2a1f04; font-size: 9.5px; font-weight: 800;
+    display: grid; place-items: center;
+  }
+  .tabbar .badge[hidden] { display: none; }
 </style>
 </head>
 <body>
-<div class="page">
-  <header class="top">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2 L21 12 L12 22 L3 12 Z" stroke="#f3c969" stroke-width="1.6" stroke-linejoin="round"/>
-          <path d="M12 7 L17 12 L12 17 L7 12 Z" fill="#f3c969" opacity=".35"/>
-        </svg>
-      </div>
+
+<!-- ============================================================ start screen -->
+<section id="startScreen" class="start">
+  <div class="start-inner">
+    <div class="start-head">
       <div>
-        <h1 id="appTitle">Gacha Simulator</h1>
-        <p class="sub" id="appSub"></p>
+        <div class="kicker" data-i18n="kicker"></div>
+        <h1 data-i18n="title"></h1>
+        <p class="lede" data-i18n="lede"></p>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button id="langEn" type="button">EN</button>
+        <button id="langZh" type="button">中文</button>
       </div>
     </div>
-    <div class="lang-switch" role="group" aria-label="Language">
-      <button id="langEn" type="button">EN</button>
-      <button id="langZh" type="button">中文</button>
+
+    <div class="rules" id="rules"></div>
+
+    <div class="start-actions">
+      <button class="start-btn" id="startBtn" type="button"></button>
+      <p class="start-note" data-i18n="startNote"></p>
     </div>
-  </header>
+  </div>
+</section>
 
-  <main class="layout">
-    <aside class="side">
-      <div class="panel bank">
-        <div class="k" id="lblPullsLeft"></div>
-        <div class="big"><span class="num" id="pullsLeft">1000</span><span class="unit" id="unitPulls"></span></div>
-        <div class="meter"><i class="gold" id="meterFill" style="width:100%"></i></div>
-      </div>
-
-      <div class="panel pity">
-        <div class="k" id="lblPity"></div>
-        <div class="pity-line">
-          <span class="n" id="pityCount">0 <small>/ 65</small></span>
-          <span class="rate-now"><span class="k" id="lblRate"></span><br><span class="v" id="ssrRate">2%</span></span>
+<!-- ============================================================= game screen -->
+<div id="gameScreen" class="game" hidden>
+  <div class="page">
+    <header class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2 L21 12 L12 22 L3 12 Z" stroke="#f3c969" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M12 7 L17 12 L12 17 L7 12 Z" fill="#f3c969" opacity=".35"/>
+          </svg>
         </div>
-        <div class="meter"><i class="blue" id="pityFill" style="width:0%"></i></div>
-      </div>
-
-      <div class="panel actions">
-        <button class="btn pull-one" id="pull1" type="button">
-          <span class="t"></span><span class="cost">1</span>
-        </button>
-        <button class="btn pull-ten" id="pull10" type="button">
-          <span class="t"></span><span class="cost">10</span>
-        </button>
-        <div class="row2">
-          <button class="btn ghost" id="sim" type="button"></button>
-          <button class="btn danger" id="reset" type="button"></button>
+        <div>
+          <h1 class="title" data-i18n="title"></h1>
+          <p class="tagline" data-i18n="tagline"></p>
         </div>
-        <p class="hint" id="hint"></p>
       </div>
-
-      <div class="panel totals">
-        <div class="stat"><div class="k" id="lblTotal"></div><div class="v" id="totalPulls">0</div></div>
-        <div class="stat"><div class="k" id="lblSsrCount"></div><div class="v" id="ssrCount">0</div></div>
-      </div>
-    </aside>
-
-    <section class="main">
-      <div class="panel stage">
-        <div class="stage-head">
-          <h2 id="resultTitle"></h2>
-          <span class="meta" id="resultMeta"></span>
+      <div class="head-right">
+        <button class="icon-btn" id="rulesBtn" type="button" aria-label="Rules">?</button>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button id="langEn2" type="button">EN</button>
+          <button id="langZh2" type="button">中文</button>
         </div>
-        <div id="results" aria-live="polite"></div>
       </div>
+    </header>
 
+    <!-- ---------------------------------------------------------- tab: gacha -->
+    <div id="tab-gacha" class="tab-panel">
+      <div class="layout">
+        <aside class="side">
+          <div class="panel bank">
+            <div class="k" data-i18n="pullsLeft"></div>
+            <div class="big"><span class="num" id="pullsLeft">1000</span><span class="unit" data-i18n="unitPulls"></span></div>
+            <div class="meter"><i class="gold" id="meterFill" style="width:100%"></i></div>
+          </div>
+
+          <div class="panel pity">
+            <div class="k" data-i18n="pity"></div>
+            <div class="pity-line">
+              <span class="n" id="pityCount">0 <small>/ 65</small></span>
+              <span class="rate-now"><span class="k" data-i18n="rate"></span><br><span class="v" id="ssrRate">2%</span></span>
+            </div>
+            <div class="meter"><i class="blue" id="pityFill" style="width:0%"></i></div>
+          </div>
+
+          <div class="panel actions">
+            <button class="btn pull-one" id="pull1" type="button">
+              <span class="t" data-i18n="pull1"></span><span class="cost">1</span>
+            </button>
+            <button class="btn pull-ten" id="pull10" type="button">
+              <span class="t" data-i18n="pull10"></span><span class="cost">10</span>
+            </button>
+            <div class="row2">
+              <button class="btn ghost" id="sim" type="button" data-i18n="sim"></button>
+              <button class="btn danger" id="reset" type="button" data-i18n="reset"></button>
+            </div>
+            <p class="hint" id="hint"></p>
+          </div>
+
+          <div class="panel totals">
+            <div class="stat"><div class="k" data-i18n="total"></div><div class="v" id="totalPulls">0</div></div>
+            <div class="stat"><div class="k" data-i18n="ssrCount"></div><div class="v" id="ssrCount">0</div></div>
+          </div>
+        </aside>
+
+        <section class="main">
+          <div class="panel stage">
+            <div class="stage-head">
+              <h2 data-i18n="resultTitle"></h2>
+              <span class="meta" id="resultMeta"></span>
+            </div>
+            <div id="results" aria-live="polite"></div>
+          </div>
+
+          <div class="panel">
+            <h2 data-i18n="ratesTitle"></h2>
+            <div class="rate-list" id="ratesBody"></div>
+            <p class="fine" data-i18n="ratesNote"></p>
+          </div>
+
+          <div class="panel help-wrap">
+            <details class="help" id="help">
+              <summary data-i18n="helpSummary"></summary>
+              <div class="body" id="helpBody"></div>
+            </details>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ----------------------------------------------------- tab: collection -->
+    <div id="tab-collection" class="tab-panel" hidden>
       <div class="panel">
-        <h2 id="ratesTitle"></h2>
-        <div class="rate-list" id="ratesBody"></div>
-        <p class="fine" id="ratesNote"></p>
+        <div class="coll-head">
+          <h2 data-i18n="collTitle"></h2>
+          <span class="coll-count" id="collCount"></span>
+        </div>
+        <div class="coll-progress">
+          <div class="meter"><i class="gold" id="collFill" style="width:0%"></i></div>
+          <span class="num" id="collNum">0 / 16</span>
+        </div>
+        <div class="legend" id="collLegend"></div>
+        <div style="height:14px"></div>
+        <div class="grid" id="collGrid"></div>
       </div>
+    </div>
 
+    <!-- -------------------------------------------------------- tab: history -->
+    <div id="tab-history" class="tab-panel" hidden>
       <div class="panel">
-        <h2 id="historyTitle"></h2>
-        <div class="hist" id="history"></div>
+        <h2 data-i18n="historyTitle"></h2>
+        <div class="summary" id="histSummary"></div>
+        <div class="hist hist-full" id="history"></div>
       </div>
+    </div>
+  </div>
 
-      <div class="panel help-wrap">
-        <details class="help" id="help">
-          <summary id="helpSummary"></summary>
-          <div class="body" id="helpBody"></div>
-        </details>
-      </div>
-    </section>
-  </main>
-
-  <footer id="footer"></footer>
+  <nav class="tabbar" role="tablist" aria-label="Sections">
+    <div class="tabs">
+      <button type="button" data-tab="gacha" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="6" width="12" height="15" rx="2"/><path d="M8 3h11a2 2 0 0 1 2 2v13"/>
+          <path d="m9 11 2 2 3.5-3.5"/>
+        </svg>
+        <span data-i18n="tabGacha"></span>
+      </button>
+      <button type="button" data-tab="collection" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        <span data-i18n="tabCollection"></span>
+      </button>
+      <button type="button" data-tab="history" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 8v5l3 2"/><circle cx="12" cy="12" r="8.2"/>
+        </svg>
+        <span data-i18n="tabHistory"></span>
+      </button>
+    </div>
+  </nav>
 </div>
 
 <script>
@@ -337,11 +517,11 @@
   var STORAGE_KEY = "sam_gacha_v1";
   var START_PULLS = 1000;
   var HISTORY_MAX = 200;
-  var AND_RATE = 0.18;      // SR share of the non-SSR mass is 18 : 80
-  var BASE_SSR = 0.02;      // 2%
-  var PITY_START = 40;      // first 40 pulls keep the base rate
-  var PITY_STEP = 0.04;     // +4 percentage points per pull after that
-  var HARD_PITY = 65;       // 2% + 4% * 25 = 102% -> guaranteed
+  var AND_RATE = 0.18;
+  var BASE_SSR = 0.02;
+  var PITY_START = 40;
+  var PITY_STEP = 0.04;
+  var HARD_PITY = 65;
 
   var CARDS = [
     { id: "dot-circle",   rarity: "R", shape: "dot",   variant: "circle" },
@@ -383,8 +563,21 @@
 
   var I18N = {
     en: {
+      kicker: "Class 05 · NE2303",
       title: "Gacha Simulator",
-      sub: "Sixteen point, 2D and 3D shapes. Rates and pity are public.",
+      lede: "A small card-drawing game that runs in one HTML file. Sixteen shapes, three rarities, honest rates, and a pity counter that is shown to you at all times.",
+      tagline: "Sixteen shapes · three rarities · honest rates",
+      startBtn: "Start game",
+      startBtnContinue: "Continue",
+      startNote: "One file · no network · progress saved in this browser",
+      rules: [
+        { t: "How to play", d: "Spend pulls to draw cards. 1000 pulls to start: one single pull costs <b>1</b>, one ten-pull costs <b>10</b>." },
+        { t: "Card pool", d: "16 cards in three rarities — <b>R</b> dots (80%), <b>SR</b> flat shapes (18%), <b>SSR</b> solids (2%). Every card inside a rarity is equally likely." },
+        { t: "Pity", d: "No SSR in the first 40 pulls keeps the rate at 2%. From the 41st pull each pull adds <b>+4 points</b>; the 65th is guaranteed." },
+        { t: "Ten-pull", d: "A ten-pull always contains at least one <b>SR or SSR</b>. A lucky batch is never downgraded." },
+        { t: "Three pages", d: "<b>Draw</b> for the card stage, <b>Collection</b> to see which of the 16 you own, <b>History</b> for the last 200 pulls and totals. Switch with the bar at the bottom." },
+        { t: "Saved locally", d: "Balance, pity counter, collection and history live in this browser's localStorage. Nothing is uploaded." }
+      ],
       pullsLeft: "Pulls left", unitPulls: "pulls", rate: "SSR chance now",
       pity: "Since last SSR",
       total: "Total pulls", ssrCount: "SSR pulled",
@@ -395,14 +588,15 @@
       resultTitle: "Latest pull",
       metaBatch: "{n} cards",
       metaOne: "1 card",
-      historyTitle: "History (last 200)",
+      historyTitle: "Draw history",
       emptyStage: "Nothing pulled yet — the pool is waiting.",
       emptyHistory: "No pulls recorded yet.",
+      histTotal: "Pulls", histR: "R", histSR: "SR", histSSR: "SSR", histRate: "SSR rate",
       hintReady: "1000 pulls to start. Single costs 1, ten-pull costs 10.",
       hintNoPulls: "Not enough pulls — reset to start over.",
       hintPity: "Pity: +4 points per pull after 40 without an SSR; 65 is guaranteed.",
       hintSim: "10,000 draws → R {r}%, SR {sr}%, SSR {ssr}% (≈1 SSR per {avg} pulls). Balance untouched.",
-      confirmReset: "Reset everything? Pulls, history and pity counter will be cleared.",
+      confirmReset: "Reset everything? Pulls, collection, history and pity counter will be cleared.",
       helpSummary: "How to use",
       help: [
         "<p>You spend pulls to draw cards. Each card is a point, a flat shape or a solid — the rarer the group, the fewer cards it holds and the harder it is to hit.</p>",
@@ -410,16 +604,36 @@
         "<li><strong>Pull ×1</strong> spends 1 pull and draws one card.</li>",
         "<li><strong>Pull ×10</strong> spends 10 pulls and guarantees at least one SR or SSR in the batch.</li>",
         "<li><strong>Simulate 10,000</strong> checks the distribution without touching your balance.</li>",
-        "<li><strong>Reset</strong> clears pulls, history and the pity counter.</li>",
+        "<li><strong>Reset</strong> clears balance, collection, history and the pity counter.</li>",
         "</ol>",
         "<p>Progress is saved in this browser (localStorage), so a refresh keeps your pulls and history. Nothing leaves the machine.</p>",
         "<p>Pity: the first 40 pulls stay at 2% SSR; from the 41st on, each pull adds 4 percentage points, so the 65th is guaranteed. The live rate is always on the left.</p>"
       ],
-      footer: "Class 05 · Gacha simulator · single file, no network, no dependencies."
+      collTitle: "Collection",
+      collCount: "Unique cards owned",
+      collLegend: ["R — dots", "SR — flat shapes", "SSR — solids"],
+      notFound: "???",
+      histBadge: "{n} new",
+      tabGacha: "Draw",
+      tabCollection: "Collection",
+      tabHistory: "History"
     },
     zh: {
+      kicker: "第 05 次课 · NE2303",
       title: "抽卡模拟器",
-      sub: "16 张点、二维、三维图形。概率与保底规则全部公开。",
+      lede: "一个单文件运行的抽卡小游戏。16 张图形卡、三个稀有度、概率完全公开，保底进度始终可见。",
+      tagline: "16 张图形 · 三档稀有度 · 概率公开",
+      startBtn: "开始游戏",
+      startBtnContinue: "继续游戏",
+      startNote: "单文件 · 无需联网 · 进度保存在本机浏览器",
+      rules: [
+        { t: "玩法", d: "消耗抽数抽卡。初始 <b>1000</b> 抽：单抽消耗 1，十连消耗 10。" },
+        { t: "卡池", d: "16 张卡分三档——<b>R</b> 点（80%）、<b>SR</b> 二维图形（18%）、<b>SSR</b> 三维图形（2%）。同一档内每张卡概率相同。" },
+        { t: "保底", d: "前 40 抽无 SSR 时维持 2%；第 41 抽起每抽 <b>+4 个百分点</b>，第 65 抽必出。" },
+        { t: "十连", d: "十连必定包含至少一个 <b>SR 或 SSR</b>；原本就出货的一批不会被降级。" },
+        { t: "三个页面", d: "<b>抽卡</b>看本次结果，<b>图鉴</b>看 16 张卡的收集情况，<b>抽卡记录</b>看最近 200 条与累计统计。用底部按钮切换。" },
+        { t: "本地存档", d: "抽数、保底计数、图鉴和记录都存在本机浏览器的 localStorage 中，不会上传。" }
+      ],
       pullsLeft: "剩余抽数", unitPulls: "抽", rate: "当前 SSR 概率",
       pity: "距上次 SSR",
       total: "累计抽数", ssrCount: "SSR 数量",
@@ -430,14 +644,15 @@
       resultTitle: "最近一次",
       metaBatch: "{n} 张",
       metaOne: "1 张",
-      historyTitle: "历史记录（最近 200 条）",
+      historyTitle: "抽卡记录",
       emptyStage: "还没有抽过卡，卡池在等你。",
       emptyHistory: "暂无记录。",
+      histTotal: "抽数", histR: "R", histSR: "SR", histSSR: "SSR", histRate: "SSR 率",
       hintReady: "初始 1000 抽。单抽消耗 1，十连消耗 10。",
       hintNoPulls: "抽数不足，点“重置”重新开始。",
       hintPity: "保底：连续 40 抽无 SSR 后每抽 +4 个百分点，第 65 抽必出。",
       hintSim: "10000 抽模拟 → R {r}%，SR {sr}%，SSR {ssr}%（平均 {avg} 抽一个 SSR）。不消耗抽数。",
-      confirmReset: "确定重置？抽数、历史记录和保底计数都会清空。",
+      confirmReset: "确定重置？抽数、图鉴、记录和保底计数都会清空。",
       helpSummary: "使用说明",
       help: [
         "<p>消耗抽数抽卡。每张卡是一个点、一个平面图形或一个立体图形，类别越稀有，卡越少、越难抽。</p>",
@@ -445,23 +660,32 @@
         "<li><strong>单抽</strong>：消耗 1 抽。</li>",
         "<li><strong>十连</strong>：消耗 10 抽，必出至少一个 SR 或 SSR。</li>",
         "<li><strong>模拟 10000 次</strong>：统计概率，不消耗抽数。</li>",
-        "<li><strong>重置</strong>：清空抽数、历史和保底计数。</li>",
+        "<li><strong>重置</strong>：清空抽数、图鉴、记录和保底计数。</li>",
         "</ol>",
         "<p>进度保存在浏览器本地（localStorage），刷新后仍在，不会上传。</p>",
         "<p>保底：前 40 抽固定 2%；第 41 抽起每抽 +4 个百分点，第 65 抽必出。当前概率实时显示在左侧。</p>"
       ],
-      footer: "第 05 次课 · 抽卡模拟器 · 单文件、无网络依赖。"
+      collTitle: "图鉴",
+      collCount: "已收集卡种",
+      collLegend: ["R — 点", "SR — 二维图形", "SSR — 三维图形"],
+      notFound: "???",
+      histBadge: "{n} 条",
+      tabGacha: "抽卡",
+      tabCollection: "图鉴",
+      tabHistory: "抽卡记录"
     }
   };
 
   /* --------------------------------------------------------------- state */
 
   var state = null;
+  var lastCards = [];
+  var currentTab = "gacha";
 
   function defaultState() {
     return {
-      v: 1, left: START_PULLS, used: 0, counter: 0,
-      stats: { R: 0, SR: 0, SSR: 0 }, history: [], lang: "en"
+      v: 2, left: START_PULLS, used: 0, counter: 0,
+      stats: { R: 0, SR: 0, SSR: 0 }, owned: {}, history: [], lang: "en"
     };
   }
 
@@ -473,8 +697,15 @@
       if (typeof s.left !== "number") s.left = d.left;
       if (typeof s.used !== "number") s.used = d.used;
       if (typeof s.counter !== "number") s.counter = d.counter;
-      if (!s.stats) s.stats = d.stats;
+      if (!s.stats) s.stats = { R: 0, SR: 0, SSR: 0 };
       if (!Array.isArray(s.history)) s.history = [];
+      if (!s.owned || typeof s.owned !== "object") {
+        s.owned = {};
+        for (var i = 0; i < s.history.length; i++) {
+          var id = s.history[i].id;
+          s.owned[id] = (s.owned[id] || 0) + 1;
+        }
+      }
       if (s.lang !== "zh" && s.lang !== "en") s.lang = "en";
       return s;
     } catch (e) { return defaultState(); }
@@ -512,10 +743,6 @@
     return p[Math.floor(rng() * p.length) % p.length];
   }
 
-  function rngDefault() { return Math.random(); }
-
-  /* ------------------------------------------------------------- drawing */
-
   function doPull(rng) {
     var res = roll(rng, state.counter);
     state.counter = res.counter;
@@ -548,6 +775,7 @@
     for (var i = 0; i < cards.length; i++) {
       var c = cards[i];
       state.stats[c.rarity] = (state.stats[c.rarity] || 0) + 1;
+      state.owned[c.id] = (state.owned[c.id] || 0) + 1;
       state.used += 1;
       state.history.unshift({ id: c.id, rarity: c.rarity, n: state.used, t: Date.now() });
     }
@@ -639,10 +867,32 @@
     return svgWrap(inner);
   }
 
-  /* ------------------------------------------------------------- render */
+  /* --------------------------------------------------------------- i18n */
 
   function t(key) { return I18N[state.lang][key]; }
   function cardName(card) { return NAME[state.lang][card.id]; }
+
+  function applyI18n() {
+    document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+    var nodes = document.querySelectorAll("[data-i18n]");
+    for (var i = 0; i < nodes.length; i++) {
+      var key = nodes[i].getAttribute("data-i18n");
+      if (I18N[state.lang][key] !== undefined) nodes[i].textContent = I18N[state.lang][key];
+    }
+    document.getElementById("helpBody").innerHTML = t("help").join("");
+    document.getElementById("startBtn").textContent = state.used > 0 ? t("startBtnContinue") : t("startBtn");
+    document.getElementById("langEn").setAttribute("aria-pressed", String(state.lang === "en"));
+    document.getElementById("langZh").setAttribute("aria-pressed", String(state.lang === "zh"));
+    document.getElementById("langEn2").setAttribute("aria-pressed", String(state.lang === "en"));
+    document.getElementById("langZh2").setAttribute("aria-pressed", String(state.lang === "zh"));
+
+    document.getElementById("rules").innerHTML = t("rules").map(function (r, i) {
+      var n = (i + 1 < 10 ? "0" : "") + (i + 1);
+      return '<article class="rule" data-n="' + n + '"><h3>' + r.t + "</h3><p>" + r.d + "</p></article>";
+    }).join("");
+  }
+
+  /* ------------------------------------------------------------- render */
 
   function fmtPct(x) {
     var v = Math.round(x * 1000) / 10;
@@ -655,32 +905,6 @@
     return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
   }
 
-  function renderStatic() {
-    document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
-    document.getElementById("appTitle").textContent = t("title");
-    document.getElementById("appSub").textContent = t("sub");
-    document.getElementById("lblPullsLeft").textContent = t("pullsLeft");
-    document.getElementById("unitPulls").textContent = t("unitPulls");
-    document.getElementById("lblPity").textContent = t("pity");
-    document.getElementById("lblRate").textContent = t("rate");
-    document.getElementById("lblTotal").textContent = t("total");
-    document.getElementById("lblSsrCount").textContent = t("ssrCount");
-    document.getElementById("resultTitle").textContent = t("resultTitle");
-    document.getElementById("ratesTitle").textContent = t("ratesTitle");
-    document.getElementById("ratesNote").textContent = t("ratesNote");
-    document.getElementById("historyTitle").textContent = t("historyTitle");
-    document.getElementById("helpSummary").textContent = t("helpSummary");
-    document.getElementById("helpBody").innerHTML = t("help").join("");
-    document.getElementById("footer").textContent = t("footer");
-    var p1 = document.getElementById("pull1"), p10 = document.getElementById("pull10");
-    p1.querySelector(".t").textContent = t("pull1");
-    p10.querySelector(".t").textContent = t("pull10");
-    document.getElementById("sim").textContent = t("sim");
-    document.getElementById("reset").textContent = t("reset");
-    document.getElementById("langEn").setAttribute("aria-pressed", String(state.lang === "en"));
-    document.getElementById("langZh").setAttribute("aria-pressed", String(state.lang === "zh"));
-  }
-
   function renderStats() {
     document.getElementById("pullsLeft").textContent = state.left;
     document.getElementById("meterFill").style.width = (state.left / START_PULLS * 100) + "%";
@@ -688,7 +912,7 @@
     document.getElementById("pityFill").style.width = (state.counter / HARD_PITY * 100) + "%";
     document.getElementById("ssrRate").textContent = fmtPct(ssrRate(state.counter));
     document.getElementById("totalPulls").textContent = state.used;
-    document.getElementById("ssrCount").textContent = state.stats.SSR;
+    document.getElementById("ssrCount").textContent = state.stats.SSR || 0;
   }
 
   function renderButtons() {
@@ -751,16 +975,55 @@
     var box = document.getElementById("history");
     if (!state.history.length) {
       box.innerHTML = '<p class="empty" style="padding:10px 12px">' + t("emptyHistory") + "</p>";
-      return;
+    } else {
+      box.innerHTML = state.history.map(function (h) {
+        var card = null;
+        for (var i = 0; i < CARDS.length; i++) if (CARDS[i].id === h.id) card = CARDS[i];
+        var nm = card ? cardName(card) : h.id;
+        return '<div class="hist-row ' + h.rarity + '">' +
+          '<span class="idx">#' + h.n + "</span>" +
+          '<span class="chip ' + h.rarity + '">' + h.rarity + "</span>" +
+          '<span class="nm">' + nm + '</span><span class="tm">' + fmtTime(h.t) + "</span></div>";
+      }).join("");
     }
-    box.innerHTML = state.history.map(function (h) {
-      var card = null;
-      for (var i = 0; i < CARDS.length; i++) if (CARDS[i].id === h.id) card = CARDS[i];
-      var nm = card ? cardName(card) : h.id;
-      return '<div class="hist-row ' + h.rarity + '">' +
-        '<span class="idx">#' + h.n + "</span>" +
-        '<span class="chip ' + h.rarity + '">' + h.rarity + "</span>" +
-        '<span class="nm">' + nm + '</span><span class="tm">' + fmtTime(h.t) + "</span></div>";
+    renderHistSummary();
+  }
+
+  function renderHistSummary() {
+    var s = state.stats, used = state.used;
+    var rate = used ? (s.SSR || 0) / used : 0;
+    var cells = [
+      { k: t("histTotal"), v: used },
+      { k: "R", v: s.R || 0 },
+      { k: "SR", v: s.SR || 0, cls: "blue" },
+      { k: "SSR", v: s.SSR || 0, cls: "gold" },
+      { k: t("histRate"), v: used ? fmtPct(rate) : "—", cls: "gold" }
+    ];
+    document.getElementById("histSummary").innerHTML = cells.map(function (c) {
+      return '<div class="cell"><div class="k">' + c.k + '</div><div class="v ' + (c.cls || "") + '">' + c.v + "</div></div>";
+    }).join("");
+  }
+
+  function renderCollection() {
+    var ownedIds = Object.keys(state.owned);
+    var total = CARDS.length;
+    var count = 0;
+    for (var i = 0; i < CARDS.length; i++) if (state.owned[CARDS[i].id]) count++;
+    document.getElementById("collFill").style.width = (count / total * 100) + "%";
+    document.getElementById("collNum").textContent = count + " / " + total;
+    document.getElementById("collCount").textContent = t("collCount");
+    document.getElementById("collLegend").innerHTML = ["R", "SR", "SSR"].map(function (r, i) {
+      return '<span><i class="dot ' + r + '"></i>' + t("collLegend")[i] + "</span>";
+    }).join("");
+
+    document.getElementById("collGrid").innerHTML = CARDS.map(function (c, i) {
+      var n = state.owned[c.id] || 0;
+      var locked = n === 0;
+      return '<div class="card ' + c.rarity + (locked ? " locked" : "") + '" style="animation-delay:' + (i * 22) + 'ms">' +
+        '<div class="inner"><span class="rar">' + (locked ? "?" : c.rarity) + "</span>" +
+        (locked ? "" : '<span class="owned-count">×' + n + "</span>") +
+        '<div class="art">' + cardSVG(c) + "</div>" +
+        '<div class="name">' + (locked ? t("notFound") : cardName(c)) + "</div></div></div>";
     }).join("");
   }
 
@@ -771,11 +1034,12 @@
   }
 
   function renderAll() {
-    renderStatic();
+    applyI18n();
     renderStats();
     renderButtons();
     renderRates();
     renderHistory();
+    renderCollection();
   }
 
   /* ------------------------------------------------------------- actions */
@@ -783,12 +1047,13 @@
   function pull(n) {
     if (state.left < n) { setHint(t("hintNoPulls"), true); return; }
     state.left -= n;
-    var cards = n === 10 ? doPullTen(rngDefault) : [doPull(rngDefault)];
+    var cards = n === 10 ? doPullTen(Math.random) : [doPull(Math.random)];
     lastCards = cards;
     commit(cards);
     renderStats();
     renderButtons();
     renderHistory();
+    renderCollection();
     renderResults(cards);
     setHint(state.left === 0 ? t("hintNoPulls") : t("hintPity"), state.left === 0);
   }
@@ -816,6 +1081,7 @@
     state = defaultState();
     state.lang = lang;
     save();
+    lastCards = [];
     renderAll();
     renderResults([]);
     setHint(t("hintReady"), false);
@@ -824,29 +1090,78 @@
   function setLang(lang) {
     state.lang = lang;
     save();
-    renderStatic();
-    renderStats();
-    renderRates();
-    renderHistory();
+    renderAll();
     renderResults(lastCards);
+    if (state.left === 0) setHint(t("hintNoPulls"), true);
   }
 
-  var lastCards = [];
+  function switchTab(name) {
+    currentTab = name;
+    ["gacha", "collection", "history"].forEach(function (tab) {
+      document.getElementById("tab-" + tab).hidden = tab !== name;
+    });
+    var btns = document.querySelectorAll(".tabbar button[data-tab]");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].setAttribute("aria-selected", String(btns[i].getAttribute("data-tab") === name));
+    }
+    if (name === "collection") renderCollection();
+    if (name === "history") renderHistory();
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function showStart() {
+    document.getElementById("startScreen").hidden = false;
+    document.getElementById("gameScreen").hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  function enterGame() {
+    document.getElementById("startScreen").hidden = true;
+    document.getElementById("gameScreen").hidden = false;
+    renderAll();
+    renderResults(lastCards);
+    switchTab("gacha");
+  }
 
   /* --------------------------------------------------------------- boot */
 
   function boot() {
     state = load();
-    renderAll();
+    applyI18n();
+    renderStats();
+    renderButtons();
+    renderRates();
+    renderHistory();
+    renderCollection();
     renderResults([]);
     setHint(t("hintReady"), false);
+    showStart();
 
+    document.getElementById("startBtn").addEventListener("click", enterGame);
+    document.getElementById("rulesBtn").addEventListener("click", showStart);
     document.getElementById("pull1").addEventListener("click", function () { pull(1); });
     document.getElementById("pull10").addEventListener("click", function () { pull(10); });
     document.getElementById("sim").addEventListener("click", function () { simulate(10000); });
     document.getElementById("reset").addEventListener("click", resetAll);
-    document.getElementById("langEn").addEventListener("click", function () { setLang("en"); });
-    document.getElementById("langZh").addEventListener("click", function () { setLang("zh"); });
+
+    var langs = [["langEn", "en"], ["langZh", "zh"], ["langEn2", "en"], ["langZh2", "zh"]];
+    langs.forEach(function (pair) {
+      document.getElementById(pair[0]).addEventListener("click", function () { setLang(pair[1]); });
+    });
+
+    var btns = document.querySelectorAll(".tabbar button[data-tab]");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", function () {
+        switchTab(this.getAttribute("data-tab"));
+      });
+    }
+
+    document.addEventListener("keydown", function (e) {
+      if (document.getElementById("gameScreen").hidden) return;
+      if (e.key === "1") switchTab("gacha");
+      if (e.key === "2") switchTab("collection");
+      if (e.key === "3") switchTab("history");
+    });
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);

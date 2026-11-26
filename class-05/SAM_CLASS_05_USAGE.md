@@ -5,7 +5,10 @@ dot (R), a flat shape (SR) or a solid (SSR). No install, no server, no network.
 
 **File:** `SAM_CLASS_05_GACHA.html`
 
-![The gacha page: controls on the left, pulled cards on the right](screenshot.png)
+![The start screen](start.png)
+
+The game has a start screen and three pages — **Draw**, **Collection**, **History**
+— switched with the bar at the bottom of the window.
 
 ---
 
@@ -30,10 +33,23 @@ Both ways give identical behaviour. There is no build step and no dependency.
 
 ---
 
-## 2. What you see
+## 2. Screens
 
-The page is split in two: a control panel on the left, the card stage on the right.
-On a narrow window (a phone, or a half-screen browser) the panel stacks on top.
+### 2.1 Start screen
+
+The file opens on the start screen: the title, an EN / 中文 switch, and six rule
+cards — how to play, card pool, pity, ten-pull guarantee, the three pages, and where
+the progress is saved. The rules are part of the page, so they can be read before a
+single pull is spent.
+
+The button at the bottom reads **Start game** on a fresh save and **Continue** once
+there is progress. The `?` button in the header, once inside the game, brings this
+screen back without touching any data.
+
+### 2.2 Draw page
+
+Controls on the left, the card stage on the right. On a narrow window the panel
+stacks on top and the tab bar stays pinned to the bottom.
 
 | Area | What it shows |
 | --- | --- |
@@ -43,11 +59,37 @@ On a narrow window (a phone, or a half-screen browser) the panel stacks on top.
 | Total pulls / SSR pulled | running totals, saved with your progress |
 | Latest pull | the cards from your most recent draw — R cards are plain, SR cards get a blue frame, SSR cards get a gold frame with a moving shimmer |
 | Drop rates | one bar per rarity, with the group rate, the per-card share and the card names |
-| History | your last 200 pulls, newest first, colour-coded per rarity with a timestamp |
 | How to use | a collapsible copy of the short instructions |
 
 Before the first pull, the stage shows a row of empty card backs instead of a blank
 box, so the page never looks broken or unfinished.
+
+### 2.3 Collection page
+
+All 16 cards on one grid, in pool order.
+
+- A card you have never drawn stays a grey silhouette with `???` and a `?` corner tag.
+- A card you own shows its art, its name, and a `×n` badge with how many copies you
+  have drawn in total.
+- The bar at the top counts **unique** cards: `11 / 16` means eleven kinds found.
+- The legend above the grid explains the three rarity colours.
+
+The collection fills in as you draw and is saved with the rest of your progress.
+
+### 2.4 History page
+
+| Area | What it shows |
+| --- | --- |
+| Summary cells | total pulls, R count, SR count, SSR count, and the **actual** SSR rate of your own draws |
+| List | the last 200 draws, newest first: draw number, rarity chip, card name, time of day |
+
+Rarity rows carry a coloured left border (blue for SR, gold for SSR), so a lucky
+streak is visible at a glance.
+
+### 2.5 Tab bar
+
+The bottom bar switches between the three pages. On a keyboard, `1`, `2` and `3`
+do the same thing.
 
 ---
 
@@ -58,9 +100,12 @@ box, so the page never looks broken or unfinished.
 | **Pull ×1** | 1 pull | Draws one card. |
 | **Pull ×10** | 10 pulls | Draws ten cards; the batch is guaranteed to contain at least one SR or SSR. |
 | **Simulate 10,000** | free | Runs 10,000 draws in memory and reports the measured distribution. Your balance, history and pity counter are untouched. |
-| **Reset** | — | Asks for confirmation, then clears pulls, history and the pity counter, and restores the 1000-pull balance. |
+| **Reset** | — | Asks for confirmation, then clears pulls, collection, history and the pity counter, and restores the 1000-pull balance. |
 
 Buttons disable themselves when the balance is too low (fewer than 1 or 10 pulls).
+
+Inside the game the `?` button in the header returns to the rules; the numbers `1`,
+`2`, `3` switch pages.
 
 ---
 
@@ -131,18 +176,25 @@ Progress lives in the browser's `localStorage` under the key `sam_gacha_v1`:
 - remaining pulls and total pulls used
 - the pity counter
 - per-rarity totals
+- which cards you own and how many copies of each (this is what the collection reads)
 - the last 200 history entries
 
 Refreshing or closing the tab keeps everything. The data is per browser and per
 machine: another browser, another computer, or a private window starts fresh, and
-nothing is uploaded anywhere. **Reset** clears all four items.
+nothing is uploaded anywhere. **Reset** clears all of it.
+
+A save made by an older version of the file (before the collection existed) is
+upgraded on load: the owned-card counts are rebuilt from the history that is still
+in storage.
 
 ---
 
 ## 8. Language
 
-The **EN / 中文** switch in the top-right changes the whole interface, the card
-names, the rate table and the help text. The choice is saved with your progress.
+The **EN / 中文** switch — on the start screen and again in the game header —
+changes the whole interface: rule cards, buttons, card names, rate table, history and
+help text. The choice is saved with your progress, so the start screen reopens in the
+language you last used.
 
 ---
 
