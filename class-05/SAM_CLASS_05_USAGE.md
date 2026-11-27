@@ -86,10 +86,14 @@ The collection fills in as you draw and is saved with the rest of your progress.
 Rarity rows carry a coloured left border (blue for SR, gold for SSR), so a lucky
 streak is visible at a glance.
 
+The list scrolls inside its own box instead of stretching the page: the summary
+cells and the tab bar stay put while you go through the 200 rows.
+
 ### 2.5 Tab bar
 
-The bottom bar switches between the three pages. On a keyboard, `1`, `2` and `3`
-do the same thing.
+The bottom bar switches between the three pages. It is pinned to the bottom of the
+window — it never scrolls away, no matter how long the page gets. On a keyboard,
+`1`, `2` and `3` do the same thing.
 
 Switching never just cuts: the page you enter fades in and rises a few pixels from
 the side that matches the direction you moved (Draw → History comes in from the

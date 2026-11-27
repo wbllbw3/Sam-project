@@ -308,7 +308,7 @@
   .summary .cell .v { font-size: 21px; font-weight: 700; font-variant-numeric: tabular-nums; margin-top: 1px; }
   .summary .cell .v.gold { color: var(--gold); }
   .summary .cell .v.blue { color: var(--blue); }
-  .hist-full { max-height: none; }
+  .hist-full { max-height: min(62vh, 640px); overflow-y: auto; overscroll-behavior: contain; }
 
   /* ---------------------------------------------------------------- tab bar */
   .tabbar {
@@ -319,6 +319,7 @@
     padding: 0 12px env(safe-area-inset-bottom);
   }
   .tabbar .tabs { display: flex; width: 100%; max-width: 520px; }
+  .tabbar[hidden] { display: none; }
   .tabbar button {
     flex: 1; border: 0; background: transparent; cursor: pointer; font-family: inherit;
     color: #64748b; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
@@ -510,7 +511,9 @@
     </div>
   </div>
 
-  <nav class="tabbar" role="tablist" aria-label="Sections">
+</div>
+
+  <nav class="tabbar" role="tablist" aria-label="Sections" hidden>
     <div class="tabs">
       <button type="button" data-tab="gacha" role="tab" aria-selected="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -534,7 +537,6 @@
       </button>
     </div>
   </nav>
-</div>
 
 <script>
 (function () {
@@ -1161,6 +1163,7 @@
   function showStart() {
     document.getElementById("startScreen").hidden = false;
     document.getElementById("gameScreen").hidden = true;
+    document.querySelector(".tabbar").hidden = true;
     document.getElementById("startBtn").textContent = state.used > 0 ? t("startBtnContinue") : t("startBtn");
     document.body.style.overflow = "";
     restartAnimation(document.getElementById("startScreen"), "anim-in");
@@ -1169,6 +1172,7 @@
   function enterGame() {
     var start = document.getElementById("startScreen");
     var game = document.getElementById("gameScreen");
+    var bar = document.querySelector(".tabbar");
 
     renderAll();
     renderResults(lastCards);
@@ -1176,6 +1180,7 @@
     if (reduceMotion || !start) {
       start.hidden = true;
       game.hidden = false;
+      bar.hidden = false;
       switchTab("gacha", { silent: true });
       return;
     }
@@ -1186,6 +1191,7 @@
       start.hidden = true;
       start.classList.remove("anim-out");
       game.hidden = false;
+      bar.hidden = false;
       restartAnimation(game, "anim-in");
       switchTab("gacha", { silent: true });
     }, 170);
