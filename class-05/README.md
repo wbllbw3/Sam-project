@@ -53,7 +53,7 @@ in the header.
 | Balance | 1000 pulls, single costs 1, ten-pull costs 10 |
 | Pages | start screen → Draw / Collection / History, bottom tab bar |
 | Saving | `localStorage`: balance, pity counter, totals, owned cards, last 200 history entries |
-| Extras | live SSR rate display, 10,000-draw simulation, EN / 中文 switch, keyboard `1` `2` `3` for tabs |
+| Extras | live SSR rate display, 10,000-draw simulation, EN / 中文 switch, keyboard `1` `2` `3` for tabs, directional page transitions (respects `prefers-reduced-motion`) |
 
 ## Verification
 

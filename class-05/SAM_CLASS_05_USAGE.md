@@ -91,6 +91,13 @@ streak is visible at a glance.
 The bottom bar switches between the three pages. On a keyboard, `1`, `2` and `3`
 do the same thing.
 
+Switching never just cuts: the page you enter fades in and rises a few pixels from
+the side that matches the direction you moved (Draw → History comes in from the
+right, History → Draw from the left), and the gold indicator on the tab bar pops
+into place. Starting the game fades the rule screen out, then brings the Draw page
+up the same way. Everything is CSS animation, roughly a third of a second, and it is
+switched off automatically if your system asks for reduced motion.
+
 ---
 
 ## 3. Controls

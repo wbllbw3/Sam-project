@@ -338,6 +338,34 @@
     display: grid; place-items: center;
   }
   .tabbar .badge[hidden] { display: none; }
+
+  /* ------------------------------------------------------------ transitions */
+  @keyframes panelIn {
+    from { opacity: 0; transform: translate3d(var(--dx, 0px), 12px, 0) scale(.994); }
+    60%  { opacity: 1; }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes screenIn {
+    from { opacity: 0; transform: translate3d(0, 14px, 0) scale(.996); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes screenOut {
+    from { opacity: 1; transform: none; }
+    to   { opacity: 0; transform: translate3d(0, -10px, 0) scale(.995); }
+  }
+  @keyframes tabPop { from { transform: scale(.82); opacity: .5; } to { transform: scale(1); opacity: 1; } }
+  @keyframes barIn { from { transform: translateX(-50%) scaleX(.2); opacity: 0; } to { transform: translateX(-50%) scaleX(1); opacity: 1; } }
+
+  .tab-panel.anim-in { animation: panelIn .34s cubic-bezier(.16, .84, .3, 1) both; }
+  #startScreen.anim-in, #gameScreen.anim-in { animation: screenIn .34s cubic-bezier(.16, .84, .3, 1) both; }
+  #startScreen.anim-out { animation: screenOut .18s ease both; pointer-events: none; }
+  .tabbar button[aria-selected="true"] svg { animation: tabPop .26s cubic-bezier(.2, .9, .3, 1.25) both; }
+  .tabbar button[aria-selected="true"]::before { animation: barIn .26s cubic-bezier(.16, .84, .3, 1) both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tab-panel.anim-in, #startScreen.anim-in, #gameScreen.anim-in, #startScreen.anim-out,
+    .tabbar button[aria-selected="true"] svg, .tabbar button[aria-selected="true"]::before { animation: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -1095,11 +1123,32 @@
     if (state.left === 0) setHint(t("hintNoPulls"), true);
   }
 
-  function switchTab(name) {
+  var TAB_ORDER = ["gacha", "collection", "history"];
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function restartAnimation(el, cls) {
+    if (!el || reduceMotion) return;
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  }
+
+  function switchTab(name, opts) {
+    var from = currentTab;
+    var dir = 0;
+    if (from && from !== name) dir = TAB_ORDER.indexOf(name) - TAB_ORDER.indexOf(from);
     currentTab = name;
+
     ["gacha", "collection", "history"].forEach(function (tab) {
       document.getElementById("tab-" + tab).hidden = tab !== name;
     });
+
+    var panel = document.getElementById("tab-" + name);
+    if (panel) {
+      panel.style.setProperty("--dx", (dir === 0 ? 0 : dir > 0 ? 20 : -20) + "px");
+      if (!(opts && opts.silent)) restartAnimation(panel, "anim-in");
+    }
+
     var btns = document.querySelectorAll(".tabbar button[data-tab]");
     for (var i = 0; i < btns.length; i++) {
       btns[i].setAttribute("aria-selected", String(btns[i].getAttribute("data-tab") === name));
@@ -1112,15 +1161,34 @@
   function showStart() {
     document.getElementById("startScreen").hidden = false;
     document.getElementById("gameScreen").hidden = true;
+    document.getElementById("startBtn").textContent = state.used > 0 ? t("startBtnContinue") : t("startBtn");
     document.body.style.overflow = "";
+    restartAnimation(document.getElementById("startScreen"), "anim-in");
   }
 
   function enterGame() {
-    document.getElementById("startScreen").hidden = true;
-    document.getElementById("gameScreen").hidden = false;
+    var start = document.getElementById("startScreen");
+    var game = document.getElementById("gameScreen");
+
     renderAll();
     renderResults(lastCards);
-    switchTab("gacha");
+
+    if (reduceMotion || !start) {
+      start.hidden = true;
+      game.hidden = false;
+      switchTab("gacha", { silent: true });
+      return;
+    }
+
+    start.classList.remove("anim-in");
+    restartAnimation(start, "anim-out");
+    setTimeout(function () {
+      start.hidden = true;
+      start.classList.remove("anim-out");
+      game.hidden = false;
+      restartAnimation(game, "anim-in");
+      switchTab("gacha", { silent: true });
+    }, 170);
   }
 
   /* --------------------------------------------------------------- boot */
